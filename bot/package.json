@@ -1,0 +1,17 @@
+{
+  "name": "nttlivebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TheMysticSword",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "hex-rgb": "^4.1.0",
+    "tmi.js": "^1.4.5"
+  },
+  "private": true
+}

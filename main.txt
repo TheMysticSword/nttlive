@@ -1,0 +1,5 @@
+/loadmod nttlive
+/loadmod nttlive_sprites
+/loadmod nttlive_util
+/loadmod nttlive_events
+/loadtxt main2
