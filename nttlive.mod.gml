@@ -369,7 +369,7 @@ with (Nothing) {
 global.erase_messages = 1;
 
 #define send_message(msg)
-//string_save(msg, "sendmessage/message_" + string(irandom(current_frame)) + ".txt");
+string_save(msg, "sendmessage/message_" + string(irandom(current_frame)) + ".txt");
 
 #define draw_timebar(time_left)
 draw_set_color(c_white);
