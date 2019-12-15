@@ -1,4 +1,4 @@
-# nttlive
+# NTTLive
 A Twitch Integration mod for Nuclear Throne Together.
 
 # Features
