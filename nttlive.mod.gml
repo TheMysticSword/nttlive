@@ -151,11 +151,11 @@ with (Nothing) {
                 event_perform(ev_alarm, 2);
                 break;
             case "walk":
-                walk = 5 / max(global.viewers, 1);
+                walk = 2;
                 walkdir = 270;
                 break;
             case "back":
-                walk = 20 / max(global.viewers, 1);
+                walk = 10;
                 walkdir = 90;
                 break;
             case "laser":
