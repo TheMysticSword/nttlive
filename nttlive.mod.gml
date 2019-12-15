@@ -2,8 +2,8 @@
 global.messages = [];
 global.erase_messages = 0;
 
-global.fileupdate_time = 0;
-global.fileupdate_maxtime = 30 * 60;
+global.timedupdate_time = 0;
+global.timedupdate_maxtime = 30 * 60;
 
 global.chatters = [];
 global.viewers = 0;
@@ -41,6 +41,26 @@ if (instance_exists(Menu)) {
     global.skill_voting_time = global.skill_voting_maxtime;
 }
 
+// update the chatter list and viewer count, also clear the message array
+global.timedupdate_time -= current_time_scale;
+if (global.timedupdate_time <= 0) {
+    global.timedupdate_time = global.timedupdate_maxtime;
+
+    global.chatters = [];
+    wait file_load("chatters.txt");
+    if (file_exists("chatters.txt")) {
+        global.chatters = json_decode(string_load("chatters.txt"));
+    }
+
+    global.viewers = 0;
+    wait file_load("viewer_count.txt");
+    if (file_exists("viewer_count.txt")) {
+        global.viewers = real(string_load("viewer_count.txt"));
+    }
+
+    global.messages = [];
+}
+
 // fetch messages
 var files = [];
 wait file_find_all("messages", files);
@@ -54,24 +74,6 @@ for (var i = 0; i < array_length(files); i++) {
             array_push(global.messages, message_data);
             file_delete(files[i].path);
         }
-    }
-}
-
-// update the chatter list and viewer count
-global.fileupdate_time -= current_time_scale;
-if (global.fileupdate_time <= 0) {
-    global.fileupdate_time = global.fileupdate_maxtime;
-
-    global.chatters = [];
-    wait file_load("chatters.txt");
-    if (file_exists("chatters.txt")) {
-        global.chatters = json_decode(string_load("chatters.txt"));
-    }
-
-    global.viewers = 0;
-    wait file_load("viewer_count.txt");
-    if (file_exists("viewer_count.txt")) {
-        global.viewers = real(string_load("viewer_count.txt"));
     }
 }
 
