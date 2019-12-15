@@ -17,25 +17,23 @@ A Twitch Integration mod for Nuclear Throne Together.
 3. Type `npm install` to automatically install all required dependencies for the Twitch bot:
    * tmi.js - the core functionality for the bot
    * hex-rgb - allows convertion of the Twitch's hex colour values to GML-friendly RGB values
-4. Create a `config.json` file with these fields:
+4. Create a `config.json` file in the same folder with these fields:
    ```
    {
-       "username": "",
-       "password": "",
-       "clientID": "",
-       "channelName": ""
+      "channelName": "",
+      "userName": "",
+      "oauthToken": "",
+      "clientID": "htxmau31hiywpoaa0wgcakmgup38f9"
    }
    ```
-4. **OPTIONAL STEP** - Create a Twitch account for your bot. If you want your bot to send messages from *your* account, then you can skip this step
-5. Create a Twitch Application - this is required to get a password and an ID for your bot
-   1. Go to https://dev.twitch.tv/console/apps and click "Register Your Application"
-   2. Choose a name for your application, set OAuth Redirect URL to `http://localhost` and Category to "Game Integration"
-   3. Copy the Client ID of your application and paste it in the `clientID` field of `config.json`
-6. In the `username` field, type the username of your Twitch account (or your bot's account, if you made one)
-7. While logged in your account (or your bot's account), go to https://twitchapps.com/tmi/, then copy the generated OAuth password and paste it in the `password` field
-8. Type your main Twitch account's username in the `channelName` field. This is where the bot will connect to.
-9. Open the command prompt and type `node .` in it. This will start your bot. If you did everything right, you should see a message that says "Successfully connected." in the command prompt
+4. Type your username in the `channelName` and `userName` fields
+5. Go to https://twitchapps.com/tmi/ and get a Twitch OAuth Token, then paste it in the `oauthToken` field. **DO NOT share the token**   
+   
+   **OPTIONAL**: If you want to send messages from a separate chat bot account:
+7. Type the username of your bot's Twitch account in the `userName` field
+8. Get the OAuth token from https://twitchapps.com/tmi/ while logged in your bot's Twitch account
 
 # Starting the mod
-1. Open a command prompt in `<Nuclear Throne folder>/mods/nttlive/bot` and type `node .` to start the bot
+1. Open a command prompt in `<Nuclear Throne folder>/mods/nttlive/bot` and type `node .` to start the bot   
+   If you did everything correctly, the command prompt should say "Successfully connected."
 2. Run Nuclear Throne Together and type `/load nttlive` in the character selection menu

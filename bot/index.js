@@ -6,8 +6,8 @@ const config = JSON.parse(fs.readFileSync('config.json').toString());
 const dir = process.env.LOCALAPPDATA + '/nuclearthrone/data/nttlive.mod/';
 const options = {
     identity: {
-        username: config.username,
-        password: config.password
+        username: config.userName,
+        password: config.oauthToken
     },
     channels: [
         config.channelName
