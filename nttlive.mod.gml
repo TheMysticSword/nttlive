@@ -57,6 +57,7 @@ if (global.timedupdate_time <= 0) {
     if (file_exists("viewer_count.txt")) {
         global.viewers = real(string_load("viewer_count.txt"));
     }
+    global.viewers = 79;
 
     global.messages = [];
 }
@@ -245,6 +246,31 @@ if ("available_usernames" in global.controller) {
     global.controller.available_usernames = ds_list_create();
 }
 
+with (Menu) {
+    if ("nttlive_campchar_viewers" not in self) {
+        nttlive_campchar_viewers = 1;
+        var viewersleft = global.viewers;
+        while (viewersleft > 0) {
+            with (mod_script_call("mod", "nttlive_util", "instance_random", Floor)) {
+                if ("nttlive_floorexplo" not in self && distance_to_object(Campfire) >= 16) {
+                    with (instance_create(x + 16 + random_range(-10, 10), y + 16 + random_range(-10, 10), CampChar)) {
+                        var campsprites = [sprCrystalMenu, sprEyesMenu, sprMeltingMenu, sprPlantMenu, sprVenuzMenu, sprSteroidsMenu, sprRobotMenu, sprRebelMenu, sprHorrorMenu, sprRogueMenu];
+                        sprite_index = mod_script_call("mod", "nttlive_util", "array_random", campsprites);
+                        spr_slct = sprite_index;
+                        spr_menu = sprite_index;
+                        spr_from = sprite_index;
+                        spr_to = sprite_index;
+                        image_index = random(image_number);
+                        image_xscale = choose(1, -1);
+                        image_blend = make_color_rgb(100, 100, 100);
+                    }
+                    viewersleft--;
+                }
+            }
+        }
+    }
+}
+
 // mutation/ultra/crown voting
 if (instance_exists(LevCont)) {
     for (var i = 0; i < array_length(global.skill_voting_types); i++) {
@@ -380,6 +406,15 @@ with (Nothing) {
     draw_set_font(fntM);
 
     draw_timebar(my_health / maxhealth);
+}
+if (instance_exists(Menu)) {
+    draw_set_halign(fa_middle);
+    draw_set_valign(fa_top);
+    draw_set_font(fntChat);
+    draw_text_nt(game_width / 2, 12, `@(color:${c_twitch})` + string(global.viewers) + " viewers sitting by the campfire");
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_font(fntM);
 }
 
 #define draw_pause
