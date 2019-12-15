@@ -167,8 +167,8 @@ with (GenCont) {
         nttlive_levelcheck = 1;
 
         // on each portal, give rads based on the number of viewers
-        global.viewer_rads = round(global.viewers * 0.5);
-        GameCont.rad += global.viewer_rads;
+        // global.viewer_rads = round(global.viewers * 0.5);
+        // GameCont.rad += global.viewer_rads;
 
         // also refill the chatter list
         global.controller.available_usernames = ds_list_create();
