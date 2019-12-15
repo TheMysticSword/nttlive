@@ -54,7 +54,6 @@ if (!instance_exists(Menu)) {
 
     if (!instance_exists(Player)) {
         global.eventtime = 0;
-        global.eventcooldown = global.eventmaxcooldown;
     }
 } else {
     global.currentevent = "";
@@ -62,10 +61,9 @@ if (!instance_exists(Menu)) {
     global.eventtime = global.eventmaxtime;
 }
 
+// end all events if the Throne exists
 if (instance_exists(Nothing)) {
-    global.currentevent = "";
-    global.eventcooldown = global.eventmaxcooldown;
-    global.eventtime = global.eventmaxtime;
+    global.eventtime = 0;
 }
 
 #define draw_gui
