@@ -142,6 +142,7 @@ with (Nothing) {
 
     // controls
     for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "thronecontrol")) {
+        var is_control = 1;
         switch (global.messages[i].content) {
             case "fire":
                 ammo = 1;
@@ -158,6 +159,12 @@ with (Nothing) {
             case "laser":
                 nttlive_throne_lasercharge++;
                 break;
+            default:
+                is_control = 0;
+                break;
+        }
+        if (is_control) {
+            message_flag_check(global.messages[i], "enemychatterhidden");
         }
     }
 }
@@ -216,11 +223,18 @@ if ("available_usernames" in global.controller) {
             }
         } else {
             for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "enemychatter")) {
-                if (string_lower(global.messages[i].author) == string_lower(nttlive_nickname)) {
-                    nttlive_messagetime = 30 * 2;
-                    nttlive_message = global.messages[i].content;
-                    nttlive_colour = make_color_rgb(global.messages[i].color.red, global.messages[i].color.green, global.messages[i].color.blue);
-                    trace_color("[" + string_upper(enemy_get_alias(self)) + "] " + global.messages[i].author + ": " + global.messages[i].content, make_color_rgb(global.messages[i].color.red, global.messages[i].color.green, global.messages[i].color.blue));
+                var msg = global.messages[i];
+                if (string_lower(msg.author) == string_lower(nttlive_nickname)) {
+                    if (fork()) {
+                        wait 2;
+                        if (instance_exists(self) && message_flag_check(msg, "enemychatterhidden")) {
+                            nttlive_messagetime = 30 * 2;
+                            nttlive_message = msg.content;
+                            nttlive_colour = make_color_rgb(msg.color.red, msg.color.green, msg.color.blue);
+                            trace_color("[" + string_upper(enemy_get_alias(self)) + "] " + msg.author + ": " + msg.content, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                        }
+                        exit;
+                    }
                 }
             }
         }
@@ -255,6 +269,7 @@ if (instance_exists(LevCont)) {
         for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "skillvoting")) {
             var skillnum = real(global.messages[i].content) - 1;
             if (skillnum >= 0 && skillnum < array_length(global.skill_voting)) {
+                message_flag_check(global.messages[i], "enemychatterhidden");
                 global.skill_voting[skillnum].votes++;
             }
         }

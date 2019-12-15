@@ -11,6 +11,7 @@ mod_script_call("mod", "nttlive", "send_message", "TwitchLit Type any angle betw
 with (mod_variable_get("mod", "nttlive", "controller")) {
     for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "shards")) {
         if (string_digits(mod_variable_get("mod", "nttlive", "messages")[i].content) == mod_variable_get("mod", "nttlive", "messages")[i].content) {
+            mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
             shards_total++;
             with (mod_script_call("mod", "nttlive_util", "instance_random", Player)) {
                 with (shard_create(x, y)) {

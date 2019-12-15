@@ -10,6 +10,7 @@ mod_script_call("mod", "nttlive", "send_message", "TwitchLit Nuke time! Type twi
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "bombdrop")) {
     if (string_pos("twitchRaid", mod_variable_get("mod", "nttlive", "messages")[i].content) != 0) {
+        mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
         with (mod_script_call("mod", "nttlive_util", "instance_random", Player)) {
             falling_nuke_create(x, y);
         }
