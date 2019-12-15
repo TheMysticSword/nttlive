@@ -5,7 +5,7 @@ return "shards";
 with (mod_variable_get("mod", "nttlive", "controller")) {
     shards_total = 0;
 }
-mod_script_call("mod", "nttlive", "send_message", "twitchLit Type any angle between 0 and 360 to fire a shard!");
+mod_script_call("mod", "nttlive", "send_message", "TwitchLit Type any angle between 0 and 360 to fire a shard!");
 
 #define event_step
 with (mod_variable_get("mod", "nttlive", "controller")) {

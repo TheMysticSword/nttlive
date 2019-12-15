@@ -5,7 +5,7 @@ return "bomb drop";
 with (mod_variable_get("mod", "nttlive", "controller")) {
     bombdrop_total = 0;
 }
-mod_script_call("mod", "nttlive", "send_message", "twitchLit Nuke time! Type twitchRaid to drop a bomb");
+mod_script_call("mod", "nttlive", "send_message", "TwitchLit Nuke time! Type twitchRaid to drop a bomb");
 
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "bombdrop")) {

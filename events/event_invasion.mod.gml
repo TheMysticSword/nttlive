@@ -2,7 +2,7 @@
 return "idpd invasion";
 
 #define event_start
-var message = "twitchLit Let's invade the game! Type ";
+var message = "TwitchLit Let's invade the game! Type these words repeatedly to activate IDPD portals! ";
 var words = ds_list_create();
 ds_list_add(words, "air", "brain", "crown", "drill", "east", "fungus", "gun", "health", "ions", "jar", "king", "lemon", "mind", "nest", "ozone");
 ds_list_add(words, "power", "quarry", "record", "stone", "throne", "unity", "vertigo", "wonder", "xmas", "yolk", "zap");
@@ -19,7 +19,6 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
         }
     }
 }
-message += " to activate an IDPD portal!";
 mod_script_call("mod", "nttlive", "send_message", message);
 
 #define event_step

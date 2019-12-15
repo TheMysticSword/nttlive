@@ -110,7 +110,7 @@ with (Nothing) {
 
     if ("nttlive_throne_initmessage" not in self) {
         nttlive_throne_initmessage = 1;
-        send_message("twitchLit BROADCASTER_NAME reached the Throne! This is your chance to defeat them - you control the Throne! Type the following words to perform respective actions: walk back fire laser");
+        send_message("TwitchLit BROADCASTER_NAME reached the Throne! This is your chance to defeat them - you control the Throne! Type the following words to perform respective actions: walk back fire laser");
     }
 
     // change the bullet barrage angle every few seconds
