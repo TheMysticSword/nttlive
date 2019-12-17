@@ -41,6 +41,21 @@ client.on('message', function(channel, state, message, self) {
         badges: state['badges']
     };
     fs.writeFileSync(dir + '/messages/message_' + state['id'].toString() + '.txt', JSON.stringify(message_file), err => console.error(err.message));
+
+    let my_chatter = null;
+    chatters.forEach(chatter => {
+        if (chatter['username'] == state['display-name']) {
+            my_chatter = chatter;
+        }
+    });
+    if (my_chatter == null) {
+        chatters.push({
+            userName: state['display-name'],
+            lastTime: Date.now()
+        });
+    } else {
+        my_chatter['lastTime'] = Date.now()
+    }
 });
 
 client.on('connected', function(address, port) {
@@ -49,24 +64,6 @@ client.on('connected', function(address, port) {
 
 client.on('disconnected', function(reason) {
     console.log('Disconnected! ' + reason);
-});
-
-client.on('join', (channel, username, self) => {
-    if (!self) {
-        if (channel == "#" + config.channelName) {
-            if (chatters.indexOf(username) == -1) {
-                chatters.push(username);
-            }
-        }
-    }
-});
-
-client.on('part', (channel, username, self) => {
-    if (!self) {
-        if (channel == "#" + config.channelName) {
-            chatters.splice(chatters.indexOf(username));
-        }
-    }
 });
 
 setInterval(function () {
@@ -81,7 +78,13 @@ setInterval(function () {
             fs.unlinkSync(file_path);
         });
     }
-    fs.writeFileSync(dir + "/chatters.txt", JSON.stringify(chatters));
+
+    let active_chatters = [];
+    chatters.filter(chatter => chatter['lastTime'] + 1000 * 60 * 5 > Date.now()).forEach(chatter => {
+        active_chatters.push(chatter['userName']);
+    });
+
+    fs.writeFileSync(dir + "/chatters.txt", JSON.stringify(active_chatters));
 }, 1000);
 
 setInterval(function () {
