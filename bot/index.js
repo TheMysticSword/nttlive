@@ -27,7 +27,7 @@ if (!fs.existsSync(dir + '/sendmessage')) {
         });
     }
 }
-var chatters = [config['channelName']];
+var chatters = [];
 
 const client = new tmi.client(options);
 
