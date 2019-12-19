@@ -9,6 +9,7 @@ load("sprInvasionPortalCharge", 4, 4, 4);
 load("sprInvasionPortalClose", 14, 16, 16);
 load("sprStreamShard", 2, 8, 8);
 load("sprStreamTrail", 3, 4, 4);
+load_wep("sprShardstream", 3, 3);
 
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);

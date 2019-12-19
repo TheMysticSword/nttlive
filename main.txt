@@ -2,4 +2,5 @@
 /loadmod nttlive_sprites
 /loadmod nttlive_util
 /loadmod nttlive_events
+/loadwep weapons/shardstream
 /loadtxt main2
