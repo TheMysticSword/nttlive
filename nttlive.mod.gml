@@ -57,7 +57,6 @@ if (global.timedupdate_time <= 0) {
     if (file_exists("viewer_count.txt")) {
         global.viewers = real(string_load("viewer_count.txt"));
     }
-    global.viewers = 79;
 
     global.messages = [];
 }
