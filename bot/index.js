@@ -44,7 +44,7 @@ client.on('message', function(channel, state, message, self) {
 
     let my_chatter = null;
     chatters.forEach(chatter => {
-        if (chatter['username'] == state['display-name']) {
+        if (chatter['userName'] == state['display-name']) {
             my_chatter = chatter;
         }
     });
