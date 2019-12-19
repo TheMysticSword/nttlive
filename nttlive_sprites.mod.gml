@@ -14,6 +14,10 @@ load("sprStreamTrail", 3, 4, 4);
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
 array_push(global.sprites, {name: _name, spr: newsprite});
 
+#define load_wep(_name, _xoffset, _yoffset)
+var newsprite = sprite_add_weapon("sprites/" + _name + ".png", _xoffset, _yoffset);
+array_push(global.sprites, {name: _name, spr: newsprite});
+
 #define get(_name)
 for (var i = 0; i < array_length(global.sprites); i++) {
     if (global.sprites[i].name == _name) {
