@@ -12,6 +12,8 @@ load("sprStreamTrail", 3, 4, 4);
 load_wep("sprShardstream", 3, 3);
 load_wep("sprBanhammer", 8, 12);
 load("sprBanhammerSlash", 8, 0, 64);
+load_wep("sprAFKLauncher", 5, 5);
+load("sprAFKLauncherMissile", 4, 5.5, 3);
 
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
