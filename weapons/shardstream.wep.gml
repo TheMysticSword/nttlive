@@ -74,6 +74,7 @@ with (instance_create(_x, _y, CustomProjectile)) {
 	decay = 30 * random_range(10, 17);
     on_step = script_ref_create(shard_step);
     on_hit = script_ref_create(shard_hit);
+	on_wall = script_ref_create(shard_wall);
     on_draw = script_ref_create(shard_draw);
     return self;
 }
@@ -145,6 +146,10 @@ if (hitcooldown <= 0) {
 		if (damage <= 0) instance_destroy();
 	}
 }
+
+#define shard_wall
+move_bounce_solid(0);
+image_angle = direction;
 
 #define shard_draw
 draw_self();
