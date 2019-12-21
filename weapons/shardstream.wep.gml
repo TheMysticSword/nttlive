@@ -57,17 +57,6 @@ if (primary) {
 #define weapon_reloaded(primary)
 
 #define weapon_fire
-if (random(100) < 1) {
-	with (instance_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle), PlasmaTrail)) {
-		sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamTrail");
-		var len = random_range(20, 30);
-		var dir = other.gunangle + random_range(-120, 120);
-		x += lengthdir_x(len, dir);
-		y += lengthdir_y(len, dir);
-		direction = dir + 180;
-		speed = len / 10;
-	}
-}
 
 #define shard_create(_x, _y)
 with (instance_create(_x, _y, CustomProjectile)) {
