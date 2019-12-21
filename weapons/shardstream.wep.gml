@@ -88,7 +88,13 @@ if (instance_exists(target)) {
 	dist = distance_to_object(target);
 	angdiff = angle_difference(point_direction(x, y, target.x, target.y), direction);
 }
-with (enemy) {
+var possible_targets = [];
+with (enemy) array_push(possible_targets, self);
+if (!instance_exists(enemy)) {
+	with (prop) array_push(possible_targets, self);
+	with (Portal) array_push(possible_targets, self);
+}
+with (possible_targets) {
 	if (collision_line(x, y, other.x, other.y, Wall, 0, 1) == noone) {
 		var dist2 = distance_to_object(other);
 		var angdiff2 = angle_difference(point_direction(x, y, other.x, other.y), other.direction);
