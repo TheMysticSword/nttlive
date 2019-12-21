@@ -19,7 +19,7 @@ return 0;
 return mod_script_call("mod", "nttlive_sprites", "get", "sprShardstream");
 
 #define weapon_area
-return 13;
+return 7;
 
 #define weapon_swap
 return sndSwapEnergy;
