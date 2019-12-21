@@ -128,10 +128,6 @@ with (Nothing) {
     if ("nttlive_throne_maxlasercharge" not in self) nttlive_throne_maxlasercharge = 10 + global.viewers;
     if ("nttlive_throne_lasershake_x" not in self) nttlive_throne_lasershake_x = 0;
     if ("nttlive_throne_lasershake_y" not in self) nttlive_throne_lasershake_y = 0;
-    nttlive_throne_lasercharge -= 0.01 * current_time_scale;
-    if (nttlive_throne_lasercharge < 0) {
-        nttlive_throne_lasercharge = 0;
-    }
     var maxshake = (nttlive_throne_lasercharge / nttlive_throne_maxlasercharge) * 20;
     nttlive_throne_lasershake_x += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_x) * 0.4 * current_time_scale;
     nttlive_throne_lasershake_y += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_y) * 0.4 * current_time_scale;

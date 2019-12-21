@@ -31,7 +31,6 @@ with (mod_variable_get("mod", "nttlive", "controller")) if ("invasion_portals" i
                 invasion_portals[i].typedtimes++;
             }
         }
-        invasion_portals[i].charge -= 0.01 * current_time_scale;
         if (invasion_portals[i].charge < 0) invasion_portals[i].charge = 0;
         if (!instance_exists(invasion_portals[i].portal)) {
             var randomfloor = noone;
