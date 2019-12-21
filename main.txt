@@ -3,4 +3,5 @@
 /loadmod nttlive_util
 /loadmod nttlive_events
 /loadwep weapons/shardstream
+/loadwep weapons/banhammer
 /loadtxt main2
