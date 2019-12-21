@@ -63,8 +63,7 @@ with (instance_create(_x, _y, CustomProjectile)) {
     sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamShard");
     image_speed = 1;
     name = "StreamShard";
-    damage = 3;
-	force = 5;
+    damage = 4;
     typ = 2;
 	target = noone;
 	speed = random_range(4, 10);
