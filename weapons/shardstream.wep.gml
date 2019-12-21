@@ -134,10 +134,12 @@ if (hitcooldown <= 0) {
 		hitcooldown = hitmaxcooldown;
 		image_xscale -= 0.1;
 		image_yscale = image_xscale;
-		with (instance_create(random_range(bbox_left, bbox_right), random_range(bbox_top, bbox_bottom), PlasmaTrail)) {
-			sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamTrail");
-			direction = other.direction + 180 + random_range(-30, 30);
-			speed = random_range(4, 10);
+		repeat (3) {
+			with (instance_create(random_range(bbox_left, bbox_right), random_range(bbox_top, bbox_bottom), PlasmaTrail)) {
+				sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamTrail");
+				direction = other.direction + 180 + random_range(-30, 30);
+				speed = random_range(2, 5);
+			}
 		}
 		damage--;
 		if (damage <= 0) instance_destroy();
