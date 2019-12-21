@@ -71,6 +71,7 @@ with (instance_create(_x, _y, CustomProjectile)) {
 	hitmaxcooldown = 10;
 	turnspeed = 0;
 	turnspeed_target = random_range(16, 22);
+	decay = 30 * random_range(10, 17);
     on_step = script_ref_create(shard_step);
     on_hit = script_ref_create(shard_hit);
     on_draw = script_ref_create(shard_draw);
@@ -116,6 +117,8 @@ if (image_index >= image_number - image_speed) {
 }
 
 hitcooldown -= current_time_scale;
+decay -= current_time_scale;
+if (decay <= 0 || place_meeting(x, y, Portal)) instance_destroy();
 
 #define shard_hit
 if (hitcooldown <= 0) {
