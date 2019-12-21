@@ -42,16 +42,16 @@ if (primary) {
 	wepangle = 1;
 	wepflip = 1;
 	if (gunangle > 90 && gunangle < 270) wepflip = -1;
-}
 
-if (fork()) {
-	wait 1;
-	if (instance_exists(self)) {
-		if (wep != mod_current) {
-			wepangle = 0;
+	if (fork()) {
+		wait 1;
+		if (instance_exists(self)) {
+			if (wep != mod_current) {
+				wepangle = 0;
+			}
 		}
+		exit;
 	}
-	exit;
 }
 
 #define weapon_reloaded(primary)
