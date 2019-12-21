@@ -33,7 +33,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
 	with (shard_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
 		team = other.team;
 		creator = other;
-		direction = other.gunangle + random_range(-45, 45);
+		direction = other.gunangle + random_range(-45, 45) * other.accuracy;
 		image_angle = direction;
 	}
 }
