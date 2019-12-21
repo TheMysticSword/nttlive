@@ -64,6 +64,7 @@ if (!instance_exists(Menu)) {
 // end all events if the Throne exists
 if (instance_exists(Nothing)) {
     global.eventtime = 0;
+    global.eventcooldown = global.eventmaxcooldown;
 }
 
 #define draw_gui
