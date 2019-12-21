@@ -68,7 +68,7 @@ with (instance_create(_x, _y, CustomProjectile)) {
 	target = noone;
 	speed = random_range(4, 10);
 	hitcooldown = 0;
-	hitmaxcooldown = 30;
+	hitmaxcooldown = 10;
 	turnspeed = 0;
 	turnspeed_target = random_range(16, 22);
     on_step = script_ref_create(shard_step);
