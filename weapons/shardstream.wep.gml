@@ -76,6 +76,7 @@ with (instance_create(_x, _y, CustomProjectile)) {
     on_hit = script_ref_create(shard_hit);
 	on_wall = script_ref_create(shard_wall);
     on_draw = script_ref_create(shard_draw);
+	on_destroy = script_ref_create(shard_destroy);
     return self;
 }
 
@@ -156,3 +157,12 @@ draw_self();
 draw_set_blend_mode(bm_add);
 draw_sprite_ext(sprite_index, image_index, x, y, image_xscale * 2, image_yscale * 2, image_angle, image_blend, image_alpha * 0.1);
 draw_set_blend_mode(bm_normal);
+
+#define shard_destroy
+repeat (12) {
+	with (instance_create(random_range(bbox_left, bbox_right), random_range(bbox_top, bbox_bottom), PlasmaTrail)) {
+		sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamTrail");
+		direction = random(360);
+		speed = random_range(4, 6);
+	}
+}
