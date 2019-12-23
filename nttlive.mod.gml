@@ -243,25 +243,42 @@ if ("available_usernames" in global.controller) {
 
 with (Menu) {
     if ("nttlive_campchar_viewers" not in self) {
-        nttlive_campchar_viewers = 1;
-        var viewersleft = global.viewers;
-        while (viewersleft > 0) {
-            with (mod_script_call("mod", "nttlive_util", "instance_random", Floor)) {
-                if ("nttlive_floorexplo" not in self && distance_to_object(Campfire) >= 16) {
-                    with (instance_create(x + 16 + random_range(-10, 10), y + 16 + random_range(-10, 10), CampChar)) {
-                        var campsprites = [sprCrystalMenu, sprEyesMenu, sprMeltingMenu, sprPlantMenu, sprVenuzMenu, sprSteroidsMenu, sprRobotMenu, sprRebelMenu, sprHorrorMenu, sprRogueMenu];
-                        sprite_index = mod_script_call("mod", "nttlive_util", "array_random", campsprites);
-                        spr_slct = sprite_index;
-                        spr_menu = sprite_index;
-                        spr_from = sprite_index;
-                        spr_to = sprite_index;
-                        image_index = random(image_number);
-                        image_xscale = choose(1, -1);
-                        image_blend = make_color_rgb(100, 100, 100);
-                    }
-                    viewersleft--;
+        nttlive_campchar_viewers = 0;
+    }
+    var viewersleft = global.viewers - nttlive_campchar_viewers;
+    if (viewersleft > 0) {
+        nttlive_campchar_viewers++;
+        with (mod_script_call("mod", "nttlive_util", "instance_random", Floor)) {
+            if ("nttlive_floorexplo" not in self && distance_to_object(Campfire) >= 16) {
+                with (instance_create(x + 16 + random_range(-10, 10), y + 16 + random_range(-10, 10), CampChar)) {
+                    nttlive_viewer_campchar = 1;
+                    var campsprites = [sprCrystalMenu, sprEyesMenu, sprMeltingMenu, sprPlantMenu, sprVenuzMenu, sprSteroidsMenu, sprRobotMenu, sprRebelMenu, sprHorrorMenu, sprRogueMenu];
+                    sprite_index = mod_script_call("mod", "nttlive_util", "array_random", campsprites);
+                    spr_slct = sprite_index;
+                    spr_menu = sprite_index;
+                    spr_from = sprite_index;
+                    spr_to = sprite_index;
+                    image_index = random(image_number);
+                    image_xscale = choose(1, -1);
+                    image_blend = make_color_rgb(100, 100, 100);
                 }
+                viewersleft--;
             }
+        }
+    }
+    if (viewersleft < 0) {
+        nttlive_campchar_viewers--;
+        var whiletries = 1000;
+        while (whiletries > 0) {
+            var campchars = instances_matching(CampChar, "nttlive_viewer_campchar", 1);
+            if (array_length(campchars) > 0) {
+                var viewer_campchar = mod_script_call("mod", "nttlive_util", "array_random", campchars);
+                with (viewer_campchar) {
+                    instance_destroy();
+                }
+                whiletries = 0;
+            }
+            whiletries--;
         }
     }
 }
