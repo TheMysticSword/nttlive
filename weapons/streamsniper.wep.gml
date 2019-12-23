@@ -36,15 +36,6 @@ return `@(color:${c_twitch})` + "pew pew pew";
 
 #define step(primary)
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "streamsniper")) {
-	nttlive_streamsniper_visualbump = 0.1;
-	sound_play_pitchvol(sndSniperTarget, random_range(1.8, 2.2), 0.5);
-	with (hitscan_bullet_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
-		team = other.team;
-		creator = other;
-	}
-}
-
-if (button_pressed(index, "horn")) {
 	nttlive_streamsniper_visualbump = 0.5;
 	nttlive_streamsniper_visualangle_add = 4;
 	sound_play_pitchvol(sndSniperTarget, random_range(1.8, 2.2), 0.5);
