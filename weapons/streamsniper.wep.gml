@@ -100,7 +100,6 @@ return mod_script_call("mod", "nttlive_sprites", "get", "sprStreamLaserSight");
 
 #define hitscan_bullet_create(_x, _y)
 with (instance_create(_x, _y, CustomProjectile)) {
-    mask_index = mod_script_call("mod", "nttlive_sprites", "get", "mskStreamSniperBullet");
     image_speed = 1;
     name = "StreamSniperBullet";
     damage = 5;
@@ -121,6 +120,7 @@ if (firedelay <= 0) {
 		other.y = y;
 		other.direction = gunangle;
 	}
+	mask_index = mod_script_call("mod", "nttlive_sprites", "get", "mskStreamSniperBullet");
 	var trail_x = x;
 	var trail_y = y;
 	var whiletries = 1000;
