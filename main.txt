@@ -5,4 +5,5 @@
 /loadwep weapons/shardstream
 /loadwep weapons/banhammer
 /loadwep weapons/afklauncher
+/loadwep weapons/streamsniper
 /loadtxt main2

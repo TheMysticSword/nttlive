@@ -14,6 +14,11 @@ load_wep("sprBanhammer", 8, 12);
 load("sprBanhammerSlash", 8, 0, 64);
 load_wep("sprAFKLauncher", 5, 5);
 load("sprAFKLauncherMissile", 4, 5.5, 3);
+load_wep("sprStreamSniper", 10, 3);
+load("mskStreamSniperBullet", 1, 1, 1);
+load("sprStreamSniperBulletHit", 4, 8, 8);
+load("sprStreamLaserSight", 1, 0, 0);
+load("sprStreamSniperCrosshair", 1, 16, 16);
 
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
