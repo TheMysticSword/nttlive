@@ -49,6 +49,7 @@ if (!instance_exists(Menu)) {
                 mod_script_call("mod", "event_" + global.currentevent, "event_end");
                 global.currentevent = "";
             }
+            sound_play_pitch(sndTurnChair, 0.7);
         }
     }
 
