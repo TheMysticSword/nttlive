@@ -19,7 +19,7 @@ return 0;
 return mod_script_call("mod", "nttlive_sprites", "get", "sprAFKLauncher");
 
 #define weapon_area
-return 8;
+return 3;
 
 #define weapon_swap
 return sndSwapEnergy;
