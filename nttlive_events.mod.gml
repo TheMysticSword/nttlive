@@ -54,6 +54,7 @@ if (!instance_exists(Menu)) {
 
     if (!instance_exists(Player)) {
         global.eventtime = 0;
+        global.eventcooldown = global.eventmaxcooldown;
     }
 } else {
     global.currentevent = "";
