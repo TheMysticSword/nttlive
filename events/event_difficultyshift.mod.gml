@@ -46,9 +46,15 @@ draw_set_halign(fa_middle);
 draw_set_valign(fa_top);
 draw_set_font(fntChat);
 draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "VOTE TO CHANGE DIFFICULTY");
+draw_set_font(fntM);
+draw_set_alpha(0.3);
+draw_set_color(c_black);
+draw_roundrect(game_width / 2 - 40 - 7, 26 + 3 - 7, game_width / 2 - 40 + 7, 26 + 3 + 7, 0);
+draw_roundrect(game_width / 2 + 40 - 7, 26 + 3 - 7, game_width / 2 + 40 + 7, 26 + 3 + 7, 0);
+draw_set_color(c_white);
+draw_set_alpha(1);
 draw_text_nt(game_width / 2 - 40, 26, "@g" + mod_script_call("mod", "nttlive_util", "text_blink", "@w") + "-");
 draw_text_nt(game_width / 2 + 40, 26, "@r" + mod_script_call("mod", "nttlive_util", "text_blink", "@w") + "+");
-draw_set_font(fntM);
 with (mod_variable_get("mod", "nttlive", "controller")) {
     draw_text_nt(game_width / 2, 24, (difficultyshift_add >= 0 ? "+" : "") + string(round(difficultyshift_add)));
     var linewidth = 40;
