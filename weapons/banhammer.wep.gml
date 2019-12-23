@@ -119,5 +119,6 @@ if (projectile_canhit_melee(other)) {
 
 #define slash_wall
 sleep(5);
+sound_play_pitch(sndMeleeWall, random_range(0.4, 0.6));
 instance_create(other.x, other.y, FloorExplo);
 with (other) instance_destroy();
