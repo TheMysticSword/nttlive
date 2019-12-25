@@ -4,7 +4,8 @@ A Twitch Integration mod for Nuclear Throne Together.
 # Features
 * Viewer nicknames and their messages above enemies!
 * Mutation and crown voting!
-* Timely events, such as dropping nukes on the streamer by typing something!
+* New weapons powered by messages!
+* Timely events!
 * Chat-controlled Throne!
 
 # Prerequisites
