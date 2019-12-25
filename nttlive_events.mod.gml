@@ -4,7 +4,7 @@
 mod_sideload();
 global.events = [];
 global.currentevent = "";
-global.eventmaxcooldown = 30 * 60 * 1.5;
+global.eventmaxcooldown = 30 * 60 * 1;
 //global.eventmaxcooldown = 30;
 global.eventcooldown = global.eventmaxcooldown;
 global.eventmaxtime = 30 * 30;
