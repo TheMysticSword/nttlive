@@ -62,8 +62,8 @@ if (!instance_exists(Menu)) {
                 global.eventtext_time = global.eventtext_maxtime;
                 mod_script_call("mod", "event_" + global.currentevent, "event_end");
                 global.currentevent = "";
+                sound_play_pitch(sndTurnChair, 0.7);
             }
-            sound_play_pitch(sndTurnChair, 0.7);
         }
     }
 
