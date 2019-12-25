@@ -20,14 +20,35 @@ global.skill_voting = [];
 global.skill_voting_maxtime = 30 * 20;
 global.skill_voting_time = 0;
 
+global.secondlife = 0;
+global.secondlife_count = 1;
+global.secondlife_votes = 0;
+global.secondlife_maxvotes = 1;
+global.secondlife_visual = 0;
+global.secondlife_time = 0;
+global.secondlife_maxtime = 30 * 20;
+global.secondlife_filling = -1;
+
 #macro c_twitch make_color_rgb(145, 70, 255);
 
 global.controller = noone;
 with (instances_matching(CustomObject, "name", "NTTLiveCont")) instance_destroy();
 
+end_step_create();
+
+#define end_step_create
+with (instances_matching(CustomEndStep, "name", mod_current)) instance_destroy();
+with (script_bind_end_step(end_step, 0)) {
+    name = mod_current;
+    persistent = 1;
+}
+
 #define game_start
+global.secondlife = 0;
+global.secondlife_count = 1;
 global.skill_voting = [];
 global.skill_voting_time = 0;
+end_step_create();
 
 #define step
 // mark explo floors to differentiate from regular floors
@@ -39,6 +60,7 @@ with (FloorExplo) {
 if (instance_exists(Menu)) {
     global.skill_voting = [];
     global.skill_voting_time = global.skill_voting_maxtime;
+    global.secondlife = 0;
 }
 
 // update the chatter list and viewer count, also clear the message array
@@ -59,6 +81,8 @@ if (global.timedupdate_time <= 0) {
     }
 
     global.messages = [];
+
+    end_step_create();
 }
 
 // fetch messages
@@ -355,6 +379,114 @@ if (instance_exists(LevCont)) {
     LevCont.maxselect = 0;
 }
 
+// revive voting
+if (global.secondlife) {
+    global.secondlife_visual += (global.secondlife_votes - global.secondlife_visual) * 0.3 * current_time_scale;
+    global.secondlife_time -= current_time_scale;
+    if (global.secondlife_time > 0) {
+        for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "secondlife")) {
+            switch (string_upper(global.messages[i].content)) {
+                case "YES":
+                    message_flag_check(global.messages[i], "enemychatterhidden");
+                    global.secondlife_votes++;
+                    break;
+                case "NO":
+                    message_flag_check(global.messages[i], "enemychatterhidden");
+                    global.secondlife_votes--;
+                    break;
+            }
+        }
+        if (global.secondlife_votes < 0) global.secondlife_votes = 0;
+        if (global.secondlife_votes >= global.secondlife_maxvotes) {
+            global.secondlife = 0;
+            sound_play(sndMutLastWish);
+            with (Player) if ("secondlife_dead" in self && secondlife_dead) {
+                my_health = round(maxhealth / 2);
+                candie = 1;
+                canfire = secondlife_canfire;
+                canspec = secondlife_canspec;
+                canswap = secondlife_canswap;
+                canaim = secondlife_canaim;
+                mask_index = secondlife_mask;
+                secondlife_dead = 0;
+                with (instances_matching_ne(projectile, "team", team)) if (distance_to_object(other) <= 32) instance_delete(self);
+                with (instances_matching_ne(enemy, "team", team)) if (distance_to_object(other) <= 32) {
+                    var pushdist = 32 - distance_to_object(other);
+                    var pushdir = point_direction(other.x, other.y, x, y);
+                    var whiletries = 1000;
+                    while (whiletries > 0) {
+                        var new_x = x + lengthdir_x(pushdist, pushdir);
+                        var new_y = y + lengthdir_y(pushdist, pushdir);
+                        if (!place_meeting(new_x, new_y, Wall)) {
+                            x = new_x;
+                            y = new_y;
+                            whiletries = 0;
+                        } else {
+                            pushdir = random(360);
+                        }
+                        whiletries--;
+                    }
+                }
+            }
+            send_message("TwitchVotes The voting is over! BROADCASTER_NAME was given another chance!");
+        }
+    } else {
+        global.secondlife = 0;
+        sound_play(sndStatueDead);
+        with (Player) if ("secondlife_dead" in self && secondlife_dead) {
+            my_health = 0;
+            candie = 1;
+            canfire = secondlife_canfire;
+            canspec = secondlife_canspec;
+            canswap = secondlife_canswap;
+            canaim = secondlife_canaim;
+            mask_index = secondlife_mask;
+        }
+        send_message("TwitchVotes The voting is over! BROADCASTER_NAME does not get another chance riPepperonis");
+    }
+}
+
+#define end_step
+if (global.secondlife_count > 0) {
+    with (Player) {
+        if (mod_script_call("mod", "nttlive_util", "player_died", self)) {
+            global.secondlife = 1;
+            global.secondlife_count--;
+            global.secondlife_votes = 0;
+            global.secondlife_maxvotes = 5 + global.viewers;
+            global.secondlife_visual = 0;
+            global.secondlife_time = global.secondlife_maxtime;
+            secondlife_revive_x = x;
+            secondlife_revive_y = y;
+            secondlife_canfire = canfire;
+            canfire = 0;
+            secondlife_canspec = canspec;
+            canspec = 0;
+            secondlife_canswap = canswap;
+            canswap = 0;
+            secondlife_canaim = canaim;
+            canaim = 0;
+            secondlife_dead = 1;
+            candie = 0;
+            secondlife_mask = mask_index;
+            mask_index = mskNone;
+            send_message("TwitchVotes BROADCASTER_NAME has died! Do we want to revive them? Vote YES or NO!");
+        }
+    }
+}
+if (global.secondlife) {
+    with (Player) if ("secondlife_dead" in self && secondlife_dead) {
+        candie = 0;
+        if ("secondlife_revive_x" in self) x = secondlife_revive_x;
+        if ("secondlife_revive_y" in self) y = secondlife_revive_y;
+        canfire = 0;
+        canspec = 0;
+        canswap = 0;
+        canaim = 0;
+        mask_index = mskNone;
+    }
+}
+
 #define draw_gui
 if (instance_exists(GenCont)) {
     if (global.viewer_rads > 0) {
@@ -428,9 +560,75 @@ if (instance_exists(Menu)) {
     draw_set_valign(fa_top);
     draw_set_font(fntM);
 }
+if (global.secondlife) {
+    draw_set_color(c_black);
+    draw_set_alpha(0.5);
+    draw_rectangle(0, 0, game_width, game_height, 0);
+    draw_set_alpha(1);
+    draw_set_color(c_white);
+
+    draw_set_halign(fa_middle);
+    draw_set_valign(fa_top);
+    draw_set_font(fntChat);
+    draw_text_nt(game_width / 2, 2, `@(color:${c_twitch})` + string(ceil(global.secondlife_time / 30)) + "s left!");
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_font(fntM);
+
+    draw_timebar(1 - (global.secondlife_time / global.secondlife_maxtime));
+
+    draw_set_halign(fa_middle);
+    draw_text_nt(game_width / 2, game_height / 2 - 50, mod_script_call("mod", "nttlive_util", "text_blink", "@y") + "VOTE TO REVIVE!");
+    draw_set_font(fntChat);
+    //draw_text_nt(game_width / 2, game_height / 2 - 50 + 8, "@s(" + string(global.secondlife_count + 1) + " revive" + (global.secondlife_count > 1 ? "s" : "") + " left)");
+    draw_set_font(fntM);
+
+    var containersprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeContainer");
+    var fillingsprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeFilling");
+    var pulsesprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifePulse");
+
+    if (surface_exists(global.secondlife_filling)) {
+        draw_surface(global.secondlife_filling, game_width / 2 - surface_get_width(global.secondlife_filling) / 2, game_height / 2 - surface_get_height(global.secondlife_filling) / 2);
+    }
+    draw_sprite(containersprt, 0, game_width / 2, game_height / 2);
+    var pulsetime = 30 * 1.2;
+    var pulsescale = 1 + 0.5 * ((current_frame * (1 / current_time_scale) % pulsetime) / 30);
+    var pulsealpha = 0.8 * (1 - (current_frame * (1 / current_time_scale) % pulsetime) / 30);
+    draw_sprite_ext(pulsesprt, 0, game_width / 2, game_height / 2, pulsescale, pulsescale, 0, c_white, pulsealpha);
+
+    draw_set_valign(fa_center);
+    draw_text_nt(game_width / 2 - sprite_get_width(containersprt) / 2 - 40, game_height / 2, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "NO");
+    draw_text_nt(game_width / 2 + sprite_get_width(containersprt) / 2 + 40, game_height / 2, mod_script_call("mod", "nttlive_util", "text_blink", "@g") + "YES");
+    draw_set_valign(fa_top);
+    draw_set_halign(fa_left);
+}
+
+#define draw
+if (global.secondlife) {
+    var containersprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeContainer");
+    var fillingsprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeFilling");
+    var erasesprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeErase");
+
+    if (!surface_exists(global.secondlife_filling)) {
+        if (sprite_get_width(containersprt) != 16) {
+            global.secondlife_filling = surface_create(sprite_get_width(containersprt), sprite_get_height(containersprt));
+        }
+    } else {
+        surface_set_target(global.secondlife_filling);
+        draw_clear_alpha(c_white, 0);
+        draw_sprite(fillingsprt, current_frame * (1 / current_time_scale) * 0.4, 0, surface_get_height(global.secondlife_filling) - sprite_get_height(fillingsprt) * (global.secondlife_visual / global.secondlife_maxvotes));
+        draw_set_blend_mode(bm_subtract);
+        draw_sprite(erasesprt, 0, 0, 0);
+        draw_set_blend_mode(bm_normal);
+        surface_reset_target();
+    }
+}
 
 #define draw_pause
 global.erase_messages = 1;
+
+#define cleanup
+if (surface_exists(global.secondlife_filling)) surface_destroy(global.secondlife_filling);
 
 #define send_message(msg)
 string_save(msg, "sendmessage/message_" + string(irandom(current_frame)) + ".txt");

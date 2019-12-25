@@ -19,6 +19,10 @@ load("mskStreamSniperBullet", 1, 1, 1);
 load("sprStreamSniperBulletHit", 4, 8, 8);
 load("sprStreamLaserSight", 1, 0, 0);
 load("sprStreamSniperCrosshair", 1, 16, 16);
+load("sprSecondLifeContainer", 1, 23, 23);
+load("sprSecondLifePulse", 1, 23, 23);
+load("sprSecondLifeErase", 1, 0, 0);
+load("sprSecondLifeFilling", 7, 0, 0);
 
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);

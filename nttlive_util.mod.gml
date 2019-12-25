@@ -146,3 +146,9 @@ switch (_inst.object_index) {
         }
         return newstr;
 }
+
+#define player_died(_plr)
+with (_plr) {
+    return my_health <= 0 && candie && (!skill_get(mut_strong_spirit) || (skill_get(mut_strong_spirit) && !canspirit)) && (race_id != char_chicken || (race_id == char_chicken && bleed >= 120));
+}
+return 0;

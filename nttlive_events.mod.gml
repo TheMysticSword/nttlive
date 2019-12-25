@@ -78,15 +78,15 @@ if (!instance_exists(Menu)) {
     global.eventtext = "";
 }
 
-// end all events if the Throne exists
-if (instance_exists(Nothing)) {
+// end all events if the Throne exists or a revival event is in progress
+if (instance_exists(Nothing) || mod_variable_get("mod", "nttlive", "secondlife")) {
     global.eventtime = 0;
     global.eventcooldown = global.eventmaxcooldown;
     global.eventtext = "";
 }
 
 #define draw_gui
-if (!instance_exists(LevCont)) {
+if (!instance_exists(LevCont) && !mod_variable_get("mod", "nttlive", "secondlife")) {
     if (global.currentevent != "") {
         draw_set_halign(1);
         draw_set_valign(0);
