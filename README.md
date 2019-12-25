@@ -6,6 +6,7 @@ A Twitch Integration mod for Nuclear Throne Together.
 * Mutation and crown voting!
 * New weapons powered by messages!
 * Timely events!
+* A once-per-run revive voting!
 * Chat-controlled Throne!
 
 # Prerequisites
