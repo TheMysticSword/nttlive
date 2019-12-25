@@ -58,6 +58,10 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     totalfired = autocontrol_fired;
     totalspecd = autocontrol_specd;
 }
+with (Player) {
+    canfire = autocontrol_canfire;
+    canspec = autocontrol_canspec;
+}
 mod_script_call("mod", "nttlive", "send_message", "imGlitch BROADCASTER_NAME gets the controls back! We fired " + string(totalfired) + " times and used the special ability " + string(totalspecd) + " times!");
 mod_variable_set("mod", "nttlive_events", "eventtext", "b:@b:bCONTROL REGAINED");
 
