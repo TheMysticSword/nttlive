@@ -64,3 +64,85 @@ return false;
 
 #define text_blink(tag)
 return (current_frame % 30 < 15 ? tag : "");
+
+#define enemy_get_alias(_obj)
+switch (_obj) {
+    case BanditBoss: return "Big Bandit";
+    case ScrapBoss: return "Big Dog";
+    case ScrapBossMissile: return "Missile";
+    case LilHunter: return "Lil' Hunter";
+    case Nothing: return "Throne";
+    case Nothing2: return "Throne II";
+    case FrogQueen: return "Mom";
+    case HyperCrystal: return "Hyper Crystal";
+    case TechnoMancer: return "Technomancer";
+    case Last: return "Captain";
+    case MeleeBandit: return "Assassin";
+    case SuperMimic: return "Health Mimic";
+    case SnowTank: return "Snowtank";
+    case GoldSnowTank: return "Golden Snowtank";
+    case SnowBot: return "Snowbot";
+    case SnowBotCar: return "Snowbot";
+    case FireBaller: return "Fireballer";
+    case SuperFireBaller: return "Super Fireballer";
+    case OasisBoss: return "Big Fish";
+    case BoneFish: return "Bonefish";
+    case InvLaserCrystal: return "Laser Crystal";
+    case InvSpider: return "Spider";
+    case EnemyHorror: return "Horror";
+    default:
+        var str = object_get_name(_obj);
+        var newstr = "";
+        for (var i = 1; i <= string_length(str); i++) {
+            var char = string_char_at(str, i);
+            if (char == string_upper(char) && i > 1) newstr += " ";
+            newstr += char;
+        }
+        return newstr;
+}
+
+#define enemy_get_alias_inst(_inst)
+switch (_inst.object_index) {
+    case BanditBoss: return "Big Bandit";
+    case ScrapBoss: return "Big Dog";
+    case ScrapBossMissile: return "Missile";
+    case LilHunter: return "Lil' Hunter";
+    case Nothing: return "Throne";
+    case Nothing2: return "Throne II";
+    case FrogQueen: return "Mom";
+    case HyperCrystal: return "Hyper Crystal";
+    case TechnoMancer: return "Technomancer";
+    case Last: return "Captain";
+    case MeleeBandit: return "Assassin";
+    case SuperMimic: return "Health Mimic";
+    case SnowTank: return "Snowtank";
+    case GoldSnowTank: return "Golden Snowtank";
+    case SnowBot: return "Snowbot";
+    case SnowBotCar: return "Snowbot";
+    case FireBaller: return "Fireballer";
+    case SuperFireBaller: return "Super Fireballer";
+    case OasisBoss: return "Big Fish";
+    case BoneFish: return "Bonefish";
+    case InvLaserCrystal: return "Laser Crystal";
+    case InvSpider: return "Spider";
+    case EnemyHorror: return "Horror";
+    case CustomHitme:
+        var str = "CustomEnemy";
+        if ("name" in _inst) str = _inst.name;
+        var newstr = "";
+        for (var i = 1; i <= string_length(str); i++) {
+            var char = string_char_at(str, i);
+            if (char == string_upper(char) && i > 1) newstr += " ";
+            newstr += char;
+        }
+        return;
+    default:
+        var str = object_get_name(_inst.object_index);
+        var newstr = "";
+        for (var i = 1; i <= string_length(str); i++) {
+            var char = string_char_at(str, i);
+            if (char == string_upper(char) && i > 1) newstr += " ";
+            newstr += char;
+        }
+        return newstr;
+}
