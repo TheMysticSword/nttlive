@@ -33,14 +33,16 @@ if (!instance_exists(Menu)) {
         if (global.currentevent == "") {
             global.eventcooldown -= current_time_scale;
             if (global.eventcooldown <= 0) {
-                var myevent = mod_script_call("mod", "nttlive_util", "array_random", global.events);
-                myevent = "invasion";
-                global.currentevent = myevent;
-                global.eventcooldown = global.eventmaxcooldown;
-                global.eventtime = global.eventmaxtime;
-                global.eventname = mod_script_call("mod", "event_" + global.currentevent, "event_name");
-                mod_script_call("mod", "event_" + global.currentevent, "event_start");
-                sound_play(sndTVOn);
+                if (array_length(global.events) > 0) {
+                    var myevent = mod_script_call("mod", "nttlive_util", "array_random", global.events);
+                    myevent = "invasion";
+                    global.currentevent = myevent;
+                    global.eventcooldown = global.eventmaxcooldown;
+                    global.eventtime = global.eventmaxtime;
+                    global.eventname = mod_script_call("mod", "event_" + global.currentevent, "event_name");
+                    mod_script_call("mod", "event_" + global.currentevent, "event_start");
+                    sound_play(sndTVOn);
+                }
             }
         } else {
             mod_script_call("mod", "event_" + global.currentevent, "event_step");
