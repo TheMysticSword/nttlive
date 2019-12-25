@@ -229,7 +229,7 @@ if ("available_usernames" in global.controller) {
                             nttlive_messagetime = 30 * 2;
                             nttlive_message = msg.content;
                             nttlive_colour = make_color_rgb(msg.color.red, msg.color.green, msg.color.blue);
-                            trace_color("[" + string_upper(enemy_get_alias(self)) + "] " + msg.author + ": " + msg.content, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                            trace_color("[" + string_upper(mod_script_call("mod", "nttlive_util", "enemy_get_alias_inst", self)) + "] " + msg.author + ": " + msg.content, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
                         }
                         exit;
                     }
@@ -450,52 +450,6 @@ if (ds_list_find_index(message.flaglist, flag) != -1) {
 }
 ds_list_add(message.flaglist, flag);
 return not_flagged;
-
-#define enemy_get_alias(_obj)
-switch (_obj.object_index) {
-    case BanditBoss: return "Big Bandit";
-    case ScrapBoss: return "Big Dog";
-    case ScrapBossMissile: return "Missile";
-    case LilHunter: return "Lil' Hunter";
-    case Nothing: return "Throne";
-    case Nothing2: return "Throne II";
-    case FrogQueen: return "Mom";
-    case HyperCrystal: return "Hyper Crystal";
-    case TechnoMancer: return "Technomancer";
-    case Last: return "Captain";
-    case MeleeBandit: return "Assassin";
-    case SuperMimic: return "Health Mimic";
-    case SnowTank: return "Snowtank";
-    case GoldSnowTank: return "Golden Snowtank";
-    case SnowBot: return "Snowbot";
-    case SnowBotCar: return "Snowbot";
-    case FireBaller: return "Fireballer";
-    case SuperFireBaller: return "Super Fireballer";
-    case OasisBoss: return "Big Fish";
-    case BoneFish: return "Bonefish";
-    case InvLaserCrystal: return "Laser Crystal";
-    case InvSpider: return "Spider";
-    case EnemyHorror: return "Horror";
-    case CustomHitme:
-        var str = "CustomEnemy";
-        if ("name" in _obj) str = _obj.name;
-        var newstr = "";
-        for (var i = 1; i <= string_length(str); i++) {
-            var char = string_char_at(str, i);
-            if (char == string_upper(char) && i > 1) newstr += " ";
-            newstr += char;
-        }
-        return;
-    default:
-        var str = object_get_name(_obj.object_index);
-        var newstr = "";
-        for (var i = 1; i <= string_length(str); i++) {
-            var char = string_char_at(str, i);
-            if (char == string_upper(char) && i > 1) newstr += " ";
-            newstr += char;
-        }
-        return newstr;
-}
 
 #define enemy_chatter_display_create()
 with (instance_create(0, 0, CustomObject)) {
