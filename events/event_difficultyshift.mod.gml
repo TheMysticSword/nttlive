@@ -63,7 +63,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     draw_line_width(game_width / 2 - linewidth / 2 + 1, 34, game_width / 2 + linewidth / 2 + 1, 34, 2);
     draw_line_width(game_width / 2 - linewidth / 2, 34 + 1, game_width / 2 + linewidth / 2, 34 + 1, 2);
     draw_line_width(game_width / 2 - linewidth / 2 + 1, 34 + 1, game_width / 2 + linewidth / 2 + 1, 34 + 1, 2);
-        draw_line_width(game_width / 2 - linewidth / 2 + linecurrent + 1, 34 - 4, game_width / 2 - linewidth / 2 + linecurrent + 1, 34 + 4, 2);
+    draw_line_width(game_width / 2 - linewidth / 2 + linecurrent + 1, 34 - 4, game_width / 2 - linewidth / 2 + linecurrent + 1, 34 + 4, 2);
     draw_line_width(game_width / 2 - linewidth / 2 + linecurrent, 34 - 4 + 1, game_width / 2 - linewidth / 2 + linecurrent, 34 + 4 + 1, 2);
     draw_line_width(game_width / 2 - linewidth / 2 + linecurrent + 1, 34 - 4 + 1, game_width / 2 - linewidth / 2 + linecurrent + 1, 34 + 4 + 1, 2);
     draw_set_color(c_white);
