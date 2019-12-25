@@ -63,7 +63,7 @@ if (array_length(instances_matching(CustomObject, "name", _name)) > 0) return tr
 return false;
 
 #define text_blink(tag)
-return (current_frame % 30 < 15 ? tag : "");
+return (current_frame * (1 / current_time_scale) % 30 < 15 ? tag : "");
 
 #define enemy_get_alias(_obj)
 switch (_obj) {
