@@ -17,7 +17,7 @@ global.skill_voting_types = [
     {displayname: "crown", button_object: CrownIcon}
 ];
 global.skill_voting = [];
-global.skill_voting_maxtime = 30 * 15;
+global.skill_voting_maxtime = 30 * 20;
 global.skill_voting_time = 0;
 
 #macro c_twitch make_color_rgb(145, 70, 255);
