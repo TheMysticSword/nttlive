@@ -20,6 +20,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     }
 }
 mod_script_call("mod", "nttlive", "send_message", message);
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@y:bVOTE FOR A WEAPON TO GIVE!");
 
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "supplydrop")) {
@@ -60,6 +61,7 @@ sound_play(sndVenuz);
 var winnerwep = mod_script_call("mod", "nttlive_util", "array_random", winners);
 var message = "TwitchVotes The voting is over! BROADCASTER_NAME gets " + weapon_get_name(winnerwep);
 mod_script_call("mod", "nttlive", "send_message", message);
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@b:bSUPPLY DROP INCOMING!");
 with (mod_script_call("mod", "nttlive_util", "instance_random", Player)) {
     with (supply_drop_create(x, y)) wep = winnerwep;
 }
@@ -68,7 +70,6 @@ with (mod_script_call("mod", "nttlive_util", "instance_random", Player)) {
 draw_set_halign(1);
 draw_set_valign(0);
 draw_set_font(fntChat);
-draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@y") + "VOTE FOR A WEAPON TO GIVE!");
 with (mod_variable_get("mod", "nttlive", "controller")) {
     var wep_offset = 32;
     for (var i = 0; i < array_length(supplydrop_voting); i++) {

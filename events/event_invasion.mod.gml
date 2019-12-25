@@ -20,6 +20,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     }
 }
 mod_script_call("mod", "nttlive", "send_message", message);
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@r:bTYPE THE WORDS TO ACTIVATE IDPD PORTALS!");
 
 #define event_step
 with (mod_variable_get("mod", "nttlive", "controller")) if ("invasion_portals" in self) {
@@ -75,14 +76,10 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     }
 }
 mod_script_call("mod", "nttlive", "send_message", "imGlitch The invasion is over! We typed a total of " + string(total) + " words!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@b:bTHE INVASION IS OVER!");
 
 #define event_draw_gui
-draw_set_halign(fa_middle);
-draw_set_valign(fa_top);
 draw_set_font(fntChat);
-draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "TYPE THE WORDS TO ACTIVATE IDPD PORTALS!");
-draw_set_halign(fa_left);
-draw_set_valign(fa_top);
 with (mod_variable_get("mod", "nttlive", "controller")) if ("invasion_portals" in self) {
     for (var i = 0; i < array_length(invasion_portals); i++) {
         with (invasion_portals[i].portal) {

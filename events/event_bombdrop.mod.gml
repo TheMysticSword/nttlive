@@ -6,6 +6,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     bombdrop_total = 0;
 }
 mod_script_call("mod", "nttlive", "send_message", "TwitchLit Nuke time! Type twitchRaid to drop a bomb");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@r:bTYPE twitchRaid TO DROP A BOMB!");
 
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "bombdrop")) {
@@ -26,14 +27,9 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     total = bombdrop_total;
 }
 mod_script_call("mod", "nttlive", "send_message", "imGlitch Bomb drop is over! A total of " + string(total) + " bombs were dropped!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@b:bBOMB DROP IS OVER");
 
 #define event_draw_gui
-draw_set_halign(1);
-draw_set_valign(0);
-draw_set_font(fntChat);
-draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "TYPE twitchRaid TO DROP A BOMB!");
-draw_set_halign(0);
-draw_set_font(fntM);
 
 #define falling_nuke_create(_x, _y)
 with (instance_create(_x, _y, CustomObject)) {

@@ -16,6 +16,7 @@ with (Player) {
     autocontrol_resetauto = 0;
 }
 mod_script_call("mod", "nttlive", "send_message", "TwitchLit The controls are now in your hands! Type PowerUpL to shoot and PowerUpR to use the special ability!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@r:bPowerUpL - FIRE | PowerUpR - ABILITY");
 
 #define event_step
 with (Player) {
@@ -58,11 +59,6 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     totalspecd = autocontrol_specd;
 }
 mod_script_call("mod", "nttlive", "send_message", "imGlitch BROADCASTER_NAME gets the controls back! We fired " + string(totalfired) + " times and used the special ability " + string(totalspecd) + " times!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@b:bCONTROL REGAINED");
 
 #define event_draw_gui
-draw_set_halign(1);
-draw_set_valign(0);
-draw_set_font(fntChat);
-draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "PowerUpL - FIRE | PowerUpR - ABILITY");
-draw_set_halign(0);
-draw_set_font(fntM);

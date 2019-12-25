@@ -7,6 +7,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     difficultyshift_visual = 0.5;
 }
 mod_script_call("mod", "nttlive", "send_message", "TwitchVotes This run is going too well, so let's make the game harder! Vote + to increase the difficulty, vote - to decrease it!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "b:@r:bVOTE TO CHANGE DIFFICULTY!");
 
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "difficultyshift")) {
@@ -40,12 +41,11 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     }
 }
 mod_script_call("mod", "nttlive", "send_message", "imGlitch The voting is over! The difficulty was " + (result >= 0 ? "increased" : "decreased") + " by " + string(abs(result)) + " levels!");
+mod_variable_set("mod", "nttlive_events", "eventtext", "DIFFICULTY " + (result >= 0 ? "b:@r:b+" : "b:@g:b") + string(abs(result)) + "!");
 
 #define event_draw_gui
 draw_set_halign(fa_middle);
 draw_set_valign(fa_top);
-draw_set_font(fntChat);
-draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "VOTE TO CHANGE DIFFICULTY");
 draw_set_font(fntM);
 draw_set_alpha(0.3);
 draw_set_color(c_black);
