@@ -73,7 +73,7 @@ if (primary) {
 if (!instance_exists(LevCont) && !instance_exists(GenCont)) {
 	for (var p = 0; p < maxp; p++) {
 		with (instances_matching(Player, "index", p)) if (wep == mod_current || bwep == mod_current) {
-			if ("nttlive_streamsniper_visualbump" in self && "nttlive_streamsniper_visualbump" in self) {
+			if ("nttlive_streamsniper_visualbump" in self && "nttlive_streamsniper_visualangle" in self) {
 				for (var p2 = 0; p2 < maxp; p2++) draw_set_visible(p2, (p == p2));
 				draw_sprite_ext(mod_script_call("mod", "nttlive_sprites", "get", "sprStreamSniperCrosshair"), 5, mouse_x[p] + mouse_delta_x[p], mouse_y[p] + mouse_delta_y[p], 1 + nttlive_streamsniper_visualbump, 1 + nttlive_streamsniper_visualbump, nttlive_streamsniper_visualangle, c_twitch, 1);
 				draw_set_visible_all(1);
