@@ -35,6 +35,14 @@ return sndSwapEnergy;
 return `@(color:${c_twitch})` + "pew pew pew";
 
 #define step(primary)
+if ("nttlive_streamsniper_visualbump" not in self) nttlive_streamsniper_visualbump = 0;
+if ("nttlive_streamsniper_visualangle" not in self) nttlive_streamsniper_visualangle = 0;
+if ("nttlive_streamsniper_visualangle_speed" not in self) nttlive_streamsniper_visualangle_speed = 1;
+if ("nttlive_streamsniper_visualangle_add" not in self) nttlive_streamsniper_visualangle_add = 0;
+nttlive_streamsniper_visualbump += (0 - nttlive_streamsniper_visualbump) * 0.1 * current_time_scale;
+nttlive_streamsniper_visualangle += (3 + nttlive_streamsniper_visualangle_add) * nttlive_streamsniper_visualangle_speed * current_time_scale;
+nttlive_streamsniper_visualangle_add += (0 - nttlive_streamsniper_visualangle_add) * 0.1 * current_time_scale;
+
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "streamsniper")) {
 	nttlive_streamsniper_visualbump = 0.5;
 	nttlive_streamsniper_visualangle_add = 4;
@@ -44,14 +52,6 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
 		creator = other;
 	}
 }
-
-if ("nttlive_streamsniper_visualbump" not in self) nttlive_streamsniper_visualbump = 0;
-if ("nttlive_streamsniper_visualangle" not in self) nttlive_streamsniper_visualangle = 0;
-if ("nttlive_streamsniper_visualangle_speed" not in self) nttlive_streamsniper_visualangle_speed = 1;
-if ("nttlive_streamsniper_visualangle_add" not in self) nttlive_streamsniper_visualangle_add = 0;
-nttlive_streamsniper_visualbump += (0 - nttlive_streamsniper_visualbump) * 0.1 * current_time_scale;
-nttlive_streamsniper_visualangle += (3 + nttlive_streamsniper_visualangle_add) * nttlive_streamsniper_visualangle_speed;
-nttlive_streamsniper_visualangle_add += (0 - nttlive_streamsniper_visualangle_add) * 0.1 * current_time_scale;
 
 if (primary) {
 	wepangle = 1;
