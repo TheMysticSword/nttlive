@@ -51,7 +51,7 @@ nttlive_gravitycannon_visualbump += (0 - nttlive_gravitycannon_visualbump) * 0.1
 nttlive_gravitycannon_visualangle += 2 * current_time_scale;
 nttlive_gravitycannon_visualalpha -= 0.1 * current_time_scale;
 
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "gravitycannon")) {
+for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "gravitycannon")) {
 	nttlive_gravitycannon_visualbump = 0.5;
 	nttlive_gravitycannon_visualalpha = 1;
 	sound_play_pitchvol(sndBigBallFire, random_range(0.55, 0.65), 0.5);

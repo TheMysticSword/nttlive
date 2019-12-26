@@ -56,7 +56,7 @@ if (nttlive_banhammer_charge >= nttlive_banhammer_maxcharge) {
 		view_shake_at(other.x, other.y, 200);
 	}
 }
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "banhammer")) {
+for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "banhammer")) {
 	nttlive_banhammer_charge++;
 }
 

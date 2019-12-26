@@ -187,6 +187,7 @@ with (Nothing) {
         }
         if (is_control) {
             message_flag_check(global.messages[i], "enemychatterhidden");
+            message_flag_check(global.messages[i], "weaponignore");
         }
     }
 }
@@ -334,6 +335,7 @@ if (instance_exists(LevCont)) {
             var skillnum = real(global.messages[i].content) - 1;
             if (skillnum >= 0 && skillnum < array_length(global.skill_voting)) {
                 message_flag_check(global.messages[i], "enemychatterhidden");
+                message_flag_check(global.messages[i], "weaponignore");
                 global.skill_voting[skillnum].votes++;
             }
         }
@@ -388,10 +390,12 @@ if (global.secondlife) {
             switch (string_upper(global.messages[i].content)) {
                 case "YES":
                     message_flag_check(global.messages[i], "enemychatterhidden");
+                    message_flag_check(global.messages[i], "weaponignore");
                     global.secondlife_votes++;
                     break;
                 case "NO":
                     message_flag_check(global.messages[i], "enemychatterhidden");
+                    message_flag_check(global.messages[i], "weaponignore");
                     global.secondlife_votes--;
                     break;
             }
@@ -647,6 +651,10 @@ if (ds_list_find_index(message.flaglist, flag) != -1) {
     not_flagged = 0;
 }
 ds_list_add(message.flaglist, flag);
+return not_flagged;
+
+#define message_flag_check_weapon(message, flag)
+var not_flagged = (message_flag_check(message, flag) && message_flag_check(message, "weaponignore"));
 return not_flagged;
 
 #define enemy_chatter_display_create()

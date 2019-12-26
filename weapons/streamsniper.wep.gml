@@ -43,7 +43,7 @@ nttlive_streamsniper_visualbump += (0 - nttlive_streamsniper_visualbump) * 0.1 *
 nttlive_streamsniper_visualangle += (3 + nttlive_streamsniper_visualangle_add) * nttlive_streamsniper_visualangle_speed * current_time_scale;
 nttlive_streamsniper_visualangle_add += (0 - nttlive_streamsniper_visualangle_add) * 0.1 * current_time_scale;
 
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "streamsniper")) {
+for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "streamsniper")) {
 	nttlive_streamsniper_visualbump = 0.5;
 	nttlive_streamsniper_visualangle_add = 4;
 	sound_play_pitchvol(sndSniperTarget, random_range(1.8, 2.2), 0.5);

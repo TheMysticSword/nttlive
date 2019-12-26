@@ -28,7 +28,7 @@ return sndSwapEnergy;
 return `@(color:${c_twitch})` + "rely on your chat";
 
 #define step(primary)
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "banhammer")) {
+for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "banhammer")) {
 	if (fork()) {
 		var missiles = irandom_range(1, 3);
 		for (var k = 0; k < missiles; k++) {

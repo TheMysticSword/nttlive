@@ -28,6 +28,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) if ("invasion_portals" i
         for (var k = 0; k < array_length(mod_variable_get("mod", "nttlive", "messages")); k++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[k], "invasion_" + string_lower(invasion_portals[i].word))) {
             if (string_lower(mod_variable_get("mod", "nttlive", "messages")[k].content) == string_lower(invasion_portals[i].word)) {
                 mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[k], "enemychatterhidden");
+                mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[k], "weaponignore");
                 invasion_portals[i].charge++;
                 invasion_portals[i].typedtimes++;
             }

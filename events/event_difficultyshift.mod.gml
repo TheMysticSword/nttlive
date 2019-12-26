@@ -14,10 +14,12 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
     with (mod_variable_get("mod", "nttlive", "controller")) {
         if (mod_variable_get("mod", "nttlive", "messages")[i].content == "+") {
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
+            mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "weaponignore");
             difficultyshift_add += 1 / (max(mod_variable_get("mod", "nttlive", "viewers"), 1) * 0.4);
         }
         if (mod_variable_get("mod", "nttlive", "messages")[i].content == "-") {
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
+            mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "weaponignore");
             difficultyshift_add -= 1 / (max(mod_variable_get("mod", "nttlive", "viewers"), 1) * 0.4);
         }
     }

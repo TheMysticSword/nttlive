@@ -28,7 +28,7 @@ return sndSwapEnergy;
 return `@(color:${c_twitch})` + "type to fire";
 
 #define step(primary)
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "shardstream")) {
+for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "shardstream")) {
 	sound_play_pitchvol(sndPlasmaHit, random_range(1.8, 2.2), 0.5);
 	with (shard_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
 		team = other.team;

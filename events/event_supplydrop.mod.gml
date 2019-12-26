@@ -27,6 +27,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
     with (mod_variable_get("mod", "nttlive", "controller")) {
         if (string_copy(mod_variable_get("mod", "nttlive", "messages")[i].content, 1, 1) == "w") {
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
+            mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "weaponignore");
             var wepnum = real(string_delete(mod_variable_get("mod", "nttlive", "messages")[i].content, 1, 1)) - 1;
             if (wepnum >= 0 && wepnum < array_length(supplydrop_voting)) {
                 supplydrop_voting[wepnum].votes++;

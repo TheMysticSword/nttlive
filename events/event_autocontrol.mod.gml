@@ -33,6 +33,7 @@ with (Player) {
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "autocontrol")) {
     if (string_pos("PowerUpL", mod_variable_get("mod", "nttlive", "messages")[i].content) != 0) {
         mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
+        mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "weaponignore");
         with (Player) {
             canfire = 1;
             clicked = 1;
@@ -43,6 +44,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
     }
     if (string_pos("PowerUpR", mod_variable_get("mod", "nttlive", "messages")[i].content) != 0) {
         mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
+        mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "weaponignore");
         with (Player) {
             canspec = 1;
             usespec = 1;
