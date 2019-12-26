@@ -23,6 +23,16 @@ load("sprSecondLifeContainer", 1, 23, 23);
 load("sprSecondLifePulse", 1, 23, 23);
 load("sprSecondLifeErase", 1, 0, 0);
 load("sprSecondLifeFilling", 7, 0, 0);
+load_wep("sprGravityCannon", 17, 7);
+load("sprGravityCannonCrosshair", 1, 16, 16);
+load("sprGravityCannonCrosshairBump", 1, 16, 16);
+load("sprGravityCannonDebuff", 3, 4, 4);
+load("sprGravityCannonDebuffExplo", 1, 5, 5);
+load("sprGravityCannonEffect", 1, 0.5, 6);
+load("sprGravityCannonBullet", 2, 24, 8);
+load("mskGravityCannonBullet", 1, 24, 8);
+load("sprGravityCannonBulletHit", 3, 8, 8);
+load("sprGravityCannonTrail", 3, 4, 4);
 
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);

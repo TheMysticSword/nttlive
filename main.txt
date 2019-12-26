@@ -6,4 +6,5 @@
 /loadwep weapons/banhammer
 /loadwep weapons/afklauncher
 /loadwep weapons/streamsniper
+/loadwep weapons/gravitycannon
 /loadtxt main2
