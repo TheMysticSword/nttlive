@@ -9,6 +9,8 @@ load("sprInvasionPortalCharge", 4, 4, 4);
 load("sprInvasionPortalClose", 14, 16, 16);
 load("sprStreamShard", 2, 8, 8);
 load("sprStreamTrail", 3, 4, 4);
+load("sprStreamFire", 7, 8, 8);
+load("sprStreamBulletHit", 4, 8, 8);
 load_wep("sprShardstream", 3, 3);
 load_wep("sprBanhammer", 8, 12);
 load("sprBanhammerSlash", 8, 0, 64);
@@ -38,6 +40,11 @@ load("sprGravityCannonTrail", 3, 4, 4);
 load_wep("sprScythePistol", 4, 4);
 load("sprScythePistolSlash", 4, 0, 8);
 load("sprScythePistolHeal", 8, 4, 5);
+
+load_wep("sprIncendiary", 11, 8);
+load("sprIncendiaryBullet", 2, 8, 8);
+load("sprIncendiaryCharge", 4, 4.5, 5);
+
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
 array_push(global.sprites, {name: _name, spr: newsprite});

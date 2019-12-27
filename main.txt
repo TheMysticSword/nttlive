@@ -8,4 +8,5 @@
 /loadwep weapons/streamsniper
 /loadwep weapons/gravitycannon
 /loadwep weapons/scythepistol
+/loadwep weapons/incendiary
 /loadtxt main2
