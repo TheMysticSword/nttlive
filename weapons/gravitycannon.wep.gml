@@ -159,6 +159,8 @@ with (target) {
 	if ("slowdown_stack" not in self) slowdown_stack = 0;
 	if ("slowdown_time" not in self) slowdown_time = 0;
 	if ("slowdown_exploded" not in self) slowdown_exploded = 0;
+	if ("slowdown_lastx" not in self) slowdown_lastx = x;
+	if ("slowdown_lasty" not in self) slowdown_lasty = y;
 	slowdown_stack++;
 	slowdown_active = 1;
 	slowdown_time = time;
@@ -173,8 +175,10 @@ with (instances_matching(hitme, "slowdown_active", 1)) {
 		slowdown_active = 0;
 	}
 	if (slowdown_stack > 3) slowdown_stack = 3;
-	x -= hspeed * slow_power * slowdown_stack;
-	y -= vspeed * slow_power * slowdown_stack;
+	x -= (x - slowdown_lastx) * slow_power * slowdown_stack;
+	y -= (y - slowdown_lasty) * slow_power * slowdown_stack;
+	slowdown_lastx = x;
+	slowdown_lasty = y;
 	if (slowdown_stack >= 3 && !slowdown_exploded) {
 		slowdown_exploded = 1;
 		sound_play_pitchvol(sndBigBallExplo, random_range(0.35, 0.45), 0.5);
