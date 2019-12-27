@@ -34,6 +34,9 @@ load("mskGravityCannonBullet", 1, 24, 8);
 load("sprGravityCannonBulletHit", 3, 8, 8);
 load("sprGravityCannonTrail", 3, 4, 4);
 
+load_wep("sprScythePistol", 4, 4);
+load("sprScythePistolSlash", 4, 0, 8);
+load("sprScythePistolHeal", 8, 4, 5);
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
 array_push(global.sprites, {name: _name, spr: newsprite});

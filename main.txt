@@ -7,4 +7,5 @@
 /loadwep weapons/afklauncher
 /loadwep weapons/streamsniper
 /loadwep weapons/gravitycannon
+/loadwep weapons/scythepistol
 /loadtxt main2
