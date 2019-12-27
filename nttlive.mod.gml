@@ -645,6 +645,7 @@ draw_rectangle((game_width / 2) * (1 - time_left), 0, game_width / 2, 2, 0);
 draw_rectangle(game_width / 2, 0, game_width / 2 + (game_width / 2) * time_left, 2, 0);
 draw_set_color(c_white);
 
+// applies this flag to the message. returns 1 if the flag wasn't added before, otherwise returns 0
 #define message_flag_check(message, flag)
 var not_flagged = 1;
 if (ds_list_find_index(message.flaglist, flag) != -1) {
@@ -653,9 +654,36 @@ if (ds_list_find_index(message.flaglist, flag) != -1) {
 ds_list_add(message.flaglist, flag);
 return not_flagged;
 
+// applies/removes this flag from the message
+#define message_flag_set(message, flag, set)
+if (set) {
+    if (ds_list_find_index(message.flaglist, flag) == -1) {
+        ds_list_add(message.flaglist, flag);
+    }
+} else {
+    ds_list_delete(message.flaglist, ds_list_find_index(message.flaglist, flag));
+}
+
+// returns 1 if this flag exists, otherwise returns 0
+#define message_flag_get(message, flag)
+var flagged = 0;
+if (ds_list_find_index(message.flaglist, flag) != -1) {
+    flagged = 1;
+}
+return flagged;
+
+// works the same as message_flag_check, but waits 4 frames before returning the actual value
+// during these 4 frames it always returns 0
+// this is to prevent event messages from activating weapons
 #define message_flag_check_weapon(message, flag)
-var not_flagged = (message_flag_check(message, flag) && message_flag_check(message, "weaponignore"));
-return not_flagged;
+var not_flagged = message_flag_check(message, flag);
+var not_ignored = message_flag_get(message, "weaponignore");
+if (fork()) {
+    wait 4;
+    not_ignored = message_flag_check(message, "weaponignore");
+    exit;
+}
+return (not_flagged && not_ignored);
 
 #define enemy_chatter_display_create()
 with (instance_create(0, 0, CustomObject)) {
