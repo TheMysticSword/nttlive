@@ -32,6 +32,15 @@ return 0;
 return 0;
 
 #define weapon_sprt
+var spr = mod_script_call("mod", "nttlive_sprites", "get", "sprGravityCannon");
+if (instance_is(self, Player)) {
+	draw_sprite_ext(spr, 0, x - lengthdir_x(wkick, gunangle), y - lengthdir_y(wkick, gunangle) + ("z" not in self ? 0 : z), 1, right, gunangle + wepangle, c_white, 1);
+	return mskNone;
+} else {
+	return spr;
+}
+
+#define weapon_sprt_hud
 return mod_script_call("mod", "nttlive_sprites", "get", "sprGravityCannon");
 
 #define weapon_area
