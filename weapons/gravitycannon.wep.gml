@@ -44,7 +44,7 @@ if (instance_is(self, Player)) {
 return mod_script_call("mod", "nttlive_sprites", "get", "sprGravityCannon");
 
 #define weapon_area
-return 4;
+return 6;
 
 #define weapon_swap
 return sndSwapEnergy;
