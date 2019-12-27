@@ -1,31 +1,41 @@
 #define init
 global.sprites = [];
 
-load("sprSupplyDropParachute", 1, 18, 32);
+// generic
 load("sprStreamChest", 7, 8, 8);
 load("sprStreamChestOpen", 1, 8, 8);
 load("sprStreamNuke", 1, 6, 8);
-load("sprInvasionPortalCharge", 4, 4, 4);
-load("sprInvasionPortalClose", 14, 16, 16);
 load("sprStreamShard", 2, 8, 8);
 load("sprStreamTrail", 3, 4, 4);
+load("sprStreamLaserSight", 1, 0, 0);
 load("sprStreamFire", 7, 8, 8);
 load("sprStreamBulletHit", 4, 8, 8);
+
+// event-related
+load("sprSupplyDropParachute", 1, 18, 32);
+load("sprInvasionPortalCharge", 4, 4, 4);
+load("sprInvasionPortalClose", 14, 16, 16);
+
+// revive voting
+load("sprSecondLifeContainer", 1, 23, 23);
+load("sprSecondLifePulse", 1, 23, 23);
+load("sprSecondLifeErase", 1, 0, 0);
+load("sprSecondLifeFilling", 7, 0, 0);
+
+// weapons
 load_wep("sprShardstream", 3, 3);
+
 load_wep("sprBanhammer", 8, 12);
 load("sprBanhammerSlash", 8, 0, 64);
+
 load_wep("sprAFKLauncher", 5, 5);
 load("sprAFKLauncherMissile", 4, 5.5, 3);
 
 load_wep("sprStreamSniper", 11, 8);
 load("mskStreamSniperBullet", 1, 1, 1);
 load("sprStreamSniperBulletHit", 4, 8, 8);
-load("sprStreamLaserSight", 1, 0, 0);
 load("sprStreamSniperCrosshair", 1, 16, 16);
-load("sprSecondLifeContainer", 1, 23, 23);
-load("sprSecondLifePulse", 1, 23, 23);
-load("sprSecondLifeErase", 1, 0, 0);
-load("sprSecondLifeFilling", 7, 0, 0);
+
 load_wep("sprGravityCannon", 17, 7);
 load("sprGravityCannonCrosshair", 1, 16, 16);
 load("sprGravityCannonCrosshairBump", 1, 16, 16);
