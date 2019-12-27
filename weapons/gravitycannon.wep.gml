@@ -67,7 +67,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
 	with (bullet_create(x + lengthdir_x(5, gunangle), y + lengthdir_y(5, gunangle))) {
 		team = other.team;
 		creator = other;
-		direction = other.gunangle + random_range(-6, 6) * other.accuracy;
+		direction = other.gunangle + random_range(-3, 3) * other.accuracy;
 		image_angle = direction;
 	}
 }
