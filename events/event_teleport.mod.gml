@@ -70,7 +70,6 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
         }
     }
 }
-sound_play(sndVenuz);
 var winnerarea = mod_script_call("mod", "nttlive_util", "array_random", winners);
 var message = "TwitchVotes The voting is over! BROADCASTER_NAME gets teleported to " + string_upper(winnerarea.name);
 mod_script_call("mod", "nttlive", "send_message", message);
