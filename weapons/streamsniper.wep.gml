@@ -8,40 +8,39 @@ with (script_bind_draw(target_draw, -12)) {
 }
 
 #define weapon_name
-return `@(color:${c_twitch})` + "STREAM SNIPER";
+var colortag = "";
+if (instance_is(self, WepPickup)) colortag = `@(color:${c_twitch})`;
+return colortag + "STREAM SNIPER";
 
 #define weapon_type
-return 0;
+return 6;
 
 #define weapon_auto
-return 1;
+return 0;
 
 #define weapon_cost
-return 0;
+return 2;
 
 #define weapon_load
-return 0;
+return 13;
 
 #define weapon_sprt
-var spr = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamSniper");
-if (instance_is(self, Player)) {
-	draw_sprite_ext(spr, 0, x - lengthdir_x(wkick, gunangle), y - lengthdir_y(wkick, gunangle) + ("z" not in self ? 0 : z), 1, right, gunangle + wepangle, c_white, 1);
-	return mskNone;
-} else {
-	return spr;
-}
+return mod_script_call("mod", "nttlive_sprites", "get", "sprStreamSniper");
 
 #define weapon_sprt_hud
-return mod_script_call("mod", "nttlive_sprites", "get", "sprStreamSniper");
+return mod_script_call("mod", "nttlive_sprites", "get", "sprStreamSniperHUD");
+
+#define weapon_laser_sight
+return mod_script_call("mod", "nttlive_sprites", "get", "sprStreamLaserSight");
 
 #define weapon_area
 return 6;
 
 #define weapon_swap
-return sndSwapEnergy;
+return sndSwapMachinegun;
 
 #define weapon_text
-return `@(color:${c_twitch})` + "seeking shots";
+return `@(color:${c_twitch})` + "mark and kill";
 
 #define step(primary)
 if ("nttlive_streamsniper_target" not in self) nttlive_streamsniper_target = noone;
@@ -49,20 +48,16 @@ if ("nttlive_streamsniper_visualbump" not in self) nttlive_streamsniper_visualbu
 if ("nttlive_streamsniper_visualangle" not in self) nttlive_streamsniper_visualangle = 0;
 if ("nttlive_streamsniper_visualangle_speed" not in self) nttlive_streamsniper_visualangle_speed = 1;
 if ("nttlive_streamsniper_visualangle_add" not in self) nttlive_streamsniper_visualangle_add = 0;
+if ("nttlive_streamsniper_canaim" not in self) nttlive_streamsniper_canaim = 0;
+if ("nttlive_streamsniper_customaim" not in self) nttlive_streamsniper_customaim = 0;
 nttlive_streamsniper_visualbump += (0 - nttlive_streamsniper_visualbump) * 0.1 * current_time_scale;
 nttlive_streamsniper_visualangle += (3 + nttlive_streamsniper_visualangle_add) * nttlive_streamsniper_visualangle_speed * current_time_scale;
 nttlive_streamsniper_visualangle_add += (0 - nttlive_streamsniper_visualangle_add) * 0.1 * current_time_scale;
 
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "streamsniper")) {
+if (nttlive_streamsniper_customaim) {
 	if (instance_exists(nttlive_streamsniper_target)) {
-		nttlive_streamsniper_visualbump = 0.5;
-		nttlive_streamsniper_visualangle_add = 4;
-		sound_play_pitchvol(sndSniperTarget, random_range(1.8, 2.2), 0.5);
-		with (hitscan_bullet_create(x, y)) {
-			team = other.team;
-			creator = other;
-			target = other.nttlive_streamsniper_target;
-		}
+		var dir = point_direction(x, y, nttlive_streamsniper_target.x, nttlive_streamsniper_target.y);
+		gunangle += angle_difference(dir, gunangle) * 0.4 * current_time_scale;
 	}
 }
 
@@ -92,32 +87,35 @@ with (instances_matching(projectile, "creator", other)) {
 	}
 }
 
-if (primary) {
-	wepangle = 1;
-	wepflip = 1;
-	if (gunangle > 90 && gunangle < 270) wepflip = -1;
-
-	if (fork()) {
-		wait 1;
-		if (instance_exists(self)) {
-			if (wep != mod_current) {
-				wepangle = 0;
-			}
-		}
-		exit;
-	}
-}
-
-#define weapon_reloaded(primary)
-
 #define weapon_fire
+if (instance_exists(nttlive_streamsniper_target)) {
+	nttlive_streamsniper_visualbump = 0.5;
+	nttlive_streamsniper_visualangle_add = 4;
+	if (!nttlive_streamsniper_customaim) {
+		nttlive_streamsniper_canaim = canaim;
+		nttlive_streamsniper_customaim = 1;
+		canaim = 0;
+	}
+	sound_play_pitch(sndSniperTarget, random_range(1.8, 2.2));
+	with (hitscan_bullet_create(x, y)) {
+		team = other.team;
+		creator = other;
+		target = other.nttlive_streamsniper_target;
+	}
+} else {
+	sound_play_pitch(sndServerBreak, random_range(1.9, 2.1));
+	with (instance_create(x, y, PopupText)) mytext = "NO TARGETS";
+	ammo[nttlive_streamammo_index] += weapon_get_cost(mod_current);
+	nttlive_streamammo_last += weapon_get_cost(mod_current);
+}
+weapon_post(4, -12, 12);
 
 #define hitscan_bullet_create(_x, _y)
 with (instance_create(_x, _y, CustomProjectile)) {
     image_speed = 1;
     name = "StreamSniperBullet";
-    damage = 5;
-    typ = 2;
+    damage = 15;
+    typ = 3;
 	firedelay = 10;
 	decay = 30;
 	target = noone;
@@ -134,6 +132,8 @@ if (firedelay <= 0) {
 	with (creator) {
 		other.x = x;
 		other.y = y;
+		canaim = nttlive_streamsniper_canaim;
+		nttlive_streamsniper_customaim = 0;
 	}
 	if (instance_exists(target)) {
 		direction = point_direction(x, y, target.x, target.y);
@@ -154,7 +154,7 @@ if (firedelay <= 0) {
 			}
 			whiletries--;
 		}
-		sound_play_pitchvol(sndSniperFire, random_range(1.8, 2.2), 0.5);
+		sound_play_pitch(sndSniperFire, random_range(1.8, 2.2));
 		x += lengthdir_x(2, direction);
 		y += lengthdir_y(2, direction);
 		with (instance_create(trail_x, trail_y, BoltTrail)) {

@@ -1,77 +1,52 @@
 #macro c_twitch make_color_rgb(145, 70, 255);
 
 #define weapon_name
-return `@(color:${c_twitch})` + "SHARDSTREAM";
+var colortag = "";
+if (instance_is(self, WepPickup)) colortag = `@(color:${c_twitch})`;
+return colortag + "FOLLOWER";
 
 #define weapon_type
-return 0;
+return 6;
 
 #define weapon_auto
 return 1;
 
 #define weapon_cost
-return 0;
+return 2;
 
 #define weapon_load
-return 0;
+return 6;
 
 #define weapon_sprt
-var spr = mod_script_call("mod", "nttlive_sprites", "get", "sprShardstream");
-if (instance_is(self, Player)) {
-	draw_sprite_ext(spr, 0, x - lengthdir_x(wkick, gunangle), y - lengthdir_y(wkick, gunangle) + ("z" not in self ? 0 : z), 1, right, gunangle + wepangle, c_white, 1);
-	return mskNone;
-} else {
-	return spr;
-}
+return mod_script_call("mod", "nttlive_sprites", "get", "sprFollower");
 
 #define weapon_sprt_hud
-return mod_script_call("mod", "nttlive_sprites", "get", "sprShardstream");
+return mod_script_call("mod", "nttlive_sprites", "get", "sprFollowerHUD");
 
 #define weapon_area
 return 7;
 
 #define weapon_swap
-return sndSwapEnergy;
+return sndSwapMachinegun;
 
 #define weapon_text
-return `@(color:${c_twitch})` + "type to fire";
-
-#define step(primary)
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "shardstream")) {
-	sound_play_pitchvol(sndPlasmaHit, random_range(1.8, 2.2), 0.5);
-	with (shard_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
-		team = other.team;
-		creator = other;
-		direction = other.gunangle + random_range(-45, 45) * other.accuracy;
-		image_angle = direction;
-	}
-}
-
-if (primary) {
-	wepangle = 1;
-	wepflip = 1;
-	if (gunangle > 90 && gunangle < 270) wepflip = -1;
-
-	if (fork()) {
-		wait 1;
-		if (instance_exists(self)) {
-			if (wep != mod_current) {
-				wepangle = 0;
-			}
-		}
-		exit;
-	}
-}
-
-#define weapon_reloaded(primary)
+return `@(color:${c_twitch})` + "no escape";
 
 #define weapon_fire
+sound_play_pitch(sndPlasmaHit, random_range(1.8, 2.2));
+with (shard_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
+	team = other.team;
+	creator = other;
+	direction = other.gunangle + random_range(-45, 45) * other.accuracy;
+	image_angle = direction;
+}
+weapon_post(7, -12, 4);
 
 #define shard_create(_x, _y)
 with (instance_create(_x, _y, CustomProjectile)) {
-    sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprStreamShard");
+    sprite_index = mod_script_call("mod", "nttlive_sprites", "get", "sprFollowerShard");
     image_speed = 1;
-    name = "StreamShard";
+    name = "FollowerShard";
     damage = 4;
     typ = 2;
 	target = noone;
@@ -140,7 +115,7 @@ if (decay <= 0 || place_meeting(x, y, Portal)) instance_destroy();
 #define shard_hit
 if (hitcooldown <= 0) {
 	if (projectile_canhit(other)) {
-		sound_play_pitchvol(sndMenuSword, random_range(1.7, 2.3), 0.5);
+		sound_play_pitch(sndMenuSword, random_range(1.7, 2.3));
 		projectile_hit(other, damage);
 		hitcooldown = hitmaxcooldown;
 		image_xscale -= 0.1;

@@ -187,7 +187,6 @@ with (Nothing) {
         }
         if (is_control) {
             message_flag_check(global.messages[i], "enemychatterhidden");
-            message_flag_check(global.messages[i], "weaponignore");
         }
     }
 }
@@ -335,7 +334,6 @@ if (instance_exists(LevCont)) {
             var skillnum = real(global.messages[i].content) - 1;
             if (skillnum >= 0 && skillnum < array_length(global.skill_voting)) {
                 message_flag_check(global.messages[i], "enemychatterhidden");
-                message_flag_check(global.messages[i], "weaponignore");
                 global.skill_voting[skillnum].votes++;
             }
         }
@@ -390,12 +388,10 @@ if (global.secondlife) {
             switch (string_upper(global.messages[i].content)) {
                 case "YES":
                     message_flag_check(global.messages[i], "enemychatterhidden");
-                    message_flag_check(global.messages[i], "weaponignore");
                     global.secondlife_votes++;
                     break;
                 case "NO":
                     message_flag_check(global.messages[i], "enemychatterhidden");
-                    message_flag_check(global.messages[i], "weaponignore");
                     global.secondlife_votes--;
                     break;
             }
@@ -447,6 +443,46 @@ if (global.secondlife) {
             mask_index = secondlife_mask;
         }
         send_message("TwitchVotes The voting is over! BROADCASTER_NAME does not get another chance riPepperonis");
+    }
+}
+
+// custom ammo
+with (Player) {
+    if ("nttlive_streamammo_index" not in self) nttlive_streamammo_index = ammo_create("MESSAGES", 2, 100);
+    if ("nttlive_streamammo_last" not in self) nttlive_streamammo_last = 0;
+    if (nttlive_streamammo_last > ammo[nttlive_streamammo_index]) {
+        nttlive_streamammo_last = ammo[nttlive_streamammo_index];
+    }
+    // if a player gets messages from an ammo pickup, remove that ammo and give another ammo type instead
+    if (ammo[nttlive_streamammo_index] > nttlive_streamammo_last) {
+        var picked = (ammo[nttlive_streamammo_index] - nttlive_streamammo_last) / typ_ammo[nttlive_streamammo_index];
+        ammo[nttlive_streamammo_index] = nttlive_streamammo_last;
+        var types = [];
+        for (var i = 0; i < array_length(ammo); i++) if (i != 0 && i != nttlive_streamammo_index) array_push(types, i);
+        var mytype = mod_script_call("mod", "nttlive_util", "array_random", types);
+        var amount = typ_ammo[mytype] * picked;
+        var str = "+" + string(amount);
+        ammo[mytype] += amount;
+        if (ammo[mytype] > typ_amax[mytype]) {
+            ammo[mytype] = typ_amax[mytype];
+            str = "MAX";
+        }
+        with (instance_create(x, y, PopupText)) mytext = str + " " + other.typ_name[mytype];
+        with (PopupText) if (string_pos(other.typ_name[other.nttlive_streamammo_index], mytext) != 0) {
+            instance_destroy();
+        }
+    }
+    for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "customammocheck")) {
+        var msg = global.messages[i];
+        if (fork()) {
+            wait 3;
+            if (instance_exists(self) && message_flag_check(msg, "enemychatterhidden")) {
+                ammo[nttlive_streamammo_index] += 3;
+                if (ammo[nttlive_streamammo_index] > typ_amax[nttlive_streamammo_index]) ammo[nttlive_streamammo_index] = typ_amax[nttlive_streamammo_index];
+                nttlive_streamammo_last = ammo[nttlive_streamammo_index];
+            }
+            exit;
+        }
     }
 }
 
@@ -634,6 +670,13 @@ global.erase_messages = 1;
 #define cleanup
 if (surface_exists(global.secondlife_filling)) surface_destroy(global.secondlife_filling);
 
+#define ammo_create(_name, _pickup, _max)
+array_push(ammo, 0);
+array_push(typ_name, _name);
+array_push(typ_ammo, _pickup);
+array_push(typ_amax, _max);
+return array_length(ammo) - 1;
+
 #define send_message(msg)
 string_save(msg, "sendmessage/message_" + string(irandom(current_frame)) + ".txt");
 
@@ -653,37 +696,6 @@ if (ds_list_find_index(message.flaglist, flag) != -1) {
 }
 ds_list_add(message.flaglist, flag);
 return not_flagged;
-
-// applies/removes this flag from the message
-#define message_flag_set(message, flag, set)
-if (set) {
-    if (ds_list_find_index(message.flaglist, flag) == -1) {
-        ds_list_add(message.flaglist, flag);
-    }
-} else {
-    ds_list_delete(message.flaglist, ds_list_find_index(message.flaglist, flag));
-}
-
-// returns 1 if this flag exists, otherwise returns 0
-#define message_flag_get(message, flag)
-var flagged = 0;
-if (ds_list_find_index(message.flaglist, flag) != -1) {
-    flagged = 1;
-}
-return flagged;
-
-// works the same as message_flag_check, but waits 4 frames before returning the actual value
-// during these 4 frames it always returns 0
-// this is to prevent event messages from activating weapons
-#define message_flag_check_weapon(message, flag)
-var not_flagged = message_flag_check(message, flag);
-var not_ignored = message_flag_get(message, "weaponignore");
-if (fork()) {
-    wait 4;
-    not_ignored = message_flag_check(message, "weaponignore");
-    exit;
-}
-return (not_flagged && not_ignored);
 
 #define enemy_chatter_display_create()
 with (instance_create(0, 0, CustomObject)) {

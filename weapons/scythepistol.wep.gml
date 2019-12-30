@@ -8,37 +8,33 @@ with (script_bind_draw(heal_draw, -12)) {
 }
 
 #define weapon_name
-return `@(color:${c_twitch})` + "SCYTHE PISTOL";
+var colortag = "";
+if (instance_is(self, WepPickup)) colortag = `@(color:${c_twitch})`;
+return colortag + "SCYTHE PISTOL";
 
 #define weapon_type
-return 0;
+return 6;
 
 #define weapon_auto
 return 1;
 
 #define weapon_cost
-return 0;
+return 1;
 
 #define weapon_load
-return 0;
+return 10;
 
 #define weapon_sprt
-var spr = mod_script_call("mod", "nttlive_sprites", "get", "sprScythePistol");
-if (instance_is(self, Player)) {
-	draw_sprite_ext(spr, 0, x - lengthdir_x(wkick, gunangle), y - lengthdir_y(wkick, gunangle) + ("z" not in self ? 0 : z), 1, right, gunangle + wepangle, c_white, 1);
-	return mskNone;
-} else {
-	return spr;
-}
+return mod_script_call("mod", "nttlive_sprites", "get", "sprScythePistol");;
 
 #define weapon_sprt_hud
-return mod_script_call("mod", "nttlive_sprites", "get", "sprScythePistol");
+return mod_script_call("mod", "nttlive_sprites", "get", "sprScythePistolHUD");
 
 #define weapon_area
 return 6;
 
 #define weapon_swap
-return sndSwapEnergy;
+return sndSwapPistol;
 
 #define weapon_text
 return `@(color:${c_twitch})` + "resurgence";
@@ -55,37 +51,17 @@ if (nttlive_scythepistol_charge >= nttlive_scythepistol_maxcharge) {
 	with (instance_create(x, y, PopupText)) mytext = "+1 HP";
 }
 
-for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check_weapon", mod_variable_get("mod", "nttlive", "messages")[i], "scythepistol")) {
-	sound_play_pitchvol(sndPistol, random_range(2, 2.2), 0.5);
-	sound_play_pitchvol(sndMenuSword, random_range(2, 2.2), 0.5);
-	sound_play_pitchvol(sndChickenThrow, random_range(1.2, 1.4), 0.5);
-	with (slash_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
-		team = other.team;
-		creator = other;
-		direction = other.gunangle + random_range(-4, 4) * other.accuracy;
-		image_angle = direction;
-	}
-}
-
-if (primary) {
-	wepangle = 1;
-	wepflip = 1;
-	if (gunangle > 90 && gunangle < 270) wepflip = -1;
-
-	if (fork()) {
-		wait 1;
-		if (instance_exists(self)) {
-			if (wep != mod_current) {
-				wepangle = 0;
-			}
-		}
-		exit;
-	}
-}
-
-#define weapon_reloaded(primary)
-
 #define weapon_fire
+sound_play_pitch(sndPistol, random_range(2, 2.2));
+sound_play_pitch(sndMenuSword, random_range(2, 2.2));
+sound_play_pitch(sndChickenThrow, random_range(1.2, 1.4));
+with (slash_create(x + lengthdir_x(14, gunangle), y + lengthdir_y(14, gunangle))) {
+	team = other.team;
+	creator = other;
+	direction = other.gunangle + random_range(-4, 4) * other.accuracy;
+	image_angle = direction;
+}
+weapon_post(4, -4, 0);
 
 #define slash_create(_x, _y)
 with (instance_create(_x, _y, CustomSlash)) {
@@ -93,8 +69,7 @@ with (instance_create(_x, _y, CustomSlash)) {
 	image_xscale = 1.5;
 	image_yscale = 1.3;
     name = "ScythePistolSlash";
-    damage = 1;
-    typ = 2;
+    damage = 5;
 	canheal = 1;
 	candeflect = 0;
 	on_hit = script_ref_create(slash_hit);
