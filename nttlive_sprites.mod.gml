@@ -59,6 +59,9 @@ load_wep("sprIncendiary", 11, 8);
 load("sprIncendiaryHUD", 1, 0, 8);
 load("sprIncendiaryBullet", 2, 8, 8);
 
+load_wep("sprChakram", 6.5, 8);
+load("sprChakramHUD", 1, 0, 8);
+
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
 array_push(global.sprites, {name: _name, spr: newsprite});

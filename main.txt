@@ -9,4 +9,5 @@
 /loadwep weapons/gravitycannon
 /loadwep weapons/scythepistol
 /loadwep weapons/incendiary
+/loadwep weapons/chakram
 /loadtxt main2
