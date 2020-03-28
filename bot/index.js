@@ -111,6 +111,7 @@ function save_viewer_count() {
 
 client.on('connected', function(address, port) {
     console.log('Successfully connected.');
+    save_viewer_count();
 });
 
 client.on('disconnected', function(reason) {
