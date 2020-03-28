@@ -1,3 +1,5 @@
+#macro c_twitch make_color_rgb(145, 70, 255);
+
 #define init
 global.messages = [];
 global.erase_messages = 0;
@@ -28,8 +30,6 @@ global.secondlife_visual = 0;
 global.secondlife_time = 0;
 global.secondlife_maxtime = 30 * 20;
 global.secondlife_filling = -1;
-
-#macro c_twitch make_color_rgb(145, 70, 255);
 
 global.controller = noone;
 with (instances_matching(CustomObject, "name", "NTTLiveCont")) instance_destroy();
