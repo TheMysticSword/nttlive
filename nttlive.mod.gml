@@ -36,6 +36,21 @@ with (instances_matching(CustomObject, "name", "NTTLiveCont")) instance_destroy(
 
 end_step_create();
 
+global.config = {
+    displayMessagesInNTTChat: true,
+    displayMessagesAboveEnemies: true,
+    mutationAndCrownVoting: true,
+    chatControlsTheThrone: true,
+    timedEvents: true,
+    revivesPerRun: 1,
+    specialAmmoPerMessage: 5
+};
+var config_file = "config.json";
+wait file_load(config_file);
+if (file_exists(config_file)) {
+    global.config = json_decode(string_load(config_file));
+}
+
 #define end_step_create
 with (instances_matching(CustomEndStep, "name", mod_current)) instance_destroy();
 with (script_bind_end_step(end_step, 0)) {
@@ -45,7 +60,7 @@ with (script_bind_end_step(end_step, 0)) {
 
 #define game_start
 global.secondlife = 0;
-global.secondlife_count = 1;
+global.secondlife_count = global.config.revivesPerRun;
 global.skill_voting = [];
 global.skill_voting_time = 0;
 end_step_create();
@@ -129,64 +144,66 @@ if (global.erase_messages) {
 if (!mod_script_call("mod", "nttlive_util", "custom_object_exists", "ThroneChatterDisplay")) {
     throne_chatter_display_create();
 }
-with (Nothing) {
-    // disable the AI
-    alarm1 = 9999;
-    alarm2 = 9999;
+if (global.config.chatControlsTheThrone == json_true) {
+    with (Nothing) {
+        // disable the AI
+        alarm1 = 9999;
+        alarm2 = 9999;
 
-    if ("nttlive_throne_initmessage" not in self) {
-        nttlive_throne_initmessage = 1;
-        send_message("TwitchLit BROADCASTER_NAME reached the Throne! This is your chance to defeat them - you control the Throne! Type the following words to perform respective actions: walk back fire laser");
-    }
-
-    // change the bullet barrage angle every few seconds
-    if ("nttlive_throne_anglechange" not in self) nttlive_throne_anglechange = 0;
-    nttlive_throne_anglechange -= current_time_scale;
-    if (nttlive_throne_anglechange <= 0) {
-        nttlive_throne_anglechange = 30 * 4;
-        addangle = choose(-30, 0, 30);
-    }
-
-    // laser charging
-    if ("nttlive_throne_lasercharge" not in self) nttlive_throne_lasercharge = 0;
-    if ("nttlive_throne_maxlasercharge" not in self) nttlive_throne_maxlasercharge = 10 + global.viewers;
-    if ("nttlive_throne_lasershake_x" not in self) nttlive_throne_lasershake_x = 0;
-    if ("nttlive_throne_lasershake_y" not in self) nttlive_throne_lasershake_y = 0;
-    var maxshake = (nttlive_throne_lasercharge / nttlive_throne_maxlasercharge) * 20;
-    nttlive_throne_lasershake_x += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_x) * 0.4 * current_time_scale;
-    nttlive_throne_lasershake_y += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_y) * 0.4 * current_time_scale;
-    if (nttlive_throne_lasercharge >= nttlive_throne_maxlasercharge) {
-        nttlive_throne_lasercharge = 0;
-        with (instance_create(0, 0, NothingBeam)) {
-            creator = other;
+        if ("nttlive_throne_initmessage" not in self) {
+            nttlive_throne_initmessage = 1;
+            send_message("TwitchLit BROADCASTER_NAME reached the Throne! This is your chance to defeat them - you control the Throne! Type the following words to perform respective actions: walk back fire laser");
         }
-    }
 
-    // controls
-    for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "thronecontrol")) {
-        var is_control = 1;
-        switch (global.messages[i].content) {
-            case "fire":
-                ammo = 1;
-                event_perform(ev_alarm, 2);
-                break;
-            case "walk":
-                walk = 2;
-                walkdir = 270;
-                break;
-            case "back":
-                walk = 10;
-                walkdir = 90;
-                break;
-            case "laser":
-                nttlive_throne_lasercharge++;
-                break;
-            default:
-                is_control = 0;
-                break;
+        // change the bullet barrage angle every few seconds
+        if ("nttlive_throne_anglechange" not in self) nttlive_throne_anglechange = 0;
+        nttlive_throne_anglechange -= current_time_scale;
+        if (nttlive_throne_anglechange <= 0) {
+            nttlive_throne_anglechange = 30 * 4;
+            addangle = choose(-30, 0, 30);
         }
-        if (is_control) {
-            message_flag_check(global.messages[i], "enemychatterhidden");
+
+        // laser charging
+        if ("nttlive_throne_lasercharge" not in self) nttlive_throne_lasercharge = 0;
+        if ("nttlive_throne_maxlasercharge" not in self) nttlive_throne_maxlasercharge = 10 + global.viewers;
+        if ("nttlive_throne_lasershake_x" not in self) nttlive_throne_lasershake_x = 0;
+        if ("nttlive_throne_lasershake_y" not in self) nttlive_throne_lasershake_y = 0;
+        var maxshake = (nttlive_throne_lasercharge / nttlive_throne_maxlasercharge) * 20;
+        nttlive_throne_lasershake_x += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_x) * 0.4 * current_time_scale;
+        nttlive_throne_lasershake_y += (random_range(-maxshake, maxshake) - nttlive_throne_lasershake_y) * 0.4 * current_time_scale;
+        if (nttlive_throne_lasercharge >= nttlive_throne_maxlasercharge) {
+            nttlive_throne_lasercharge = 0;
+            with (instance_create(0, 0, NothingBeam)) {
+                creator = other;
+            }
+        }
+
+        // controls
+        for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "thronecontrol")) {
+            var is_control = 1;
+            switch (global.messages[i].content) {
+                case "fire":
+                    ammo = 1;
+                    event_perform(ev_alarm, 2);
+                    break;
+                case "walk":
+                    walk = 2;
+                    walkdir = 270;
+                    break;
+                case "back":
+                    walk = 10;
+                    walkdir = 90;
+                    break;
+                case "laser":
+                    nttlive_throne_lasercharge++;
+                    break;
+                default:
+                    is_control = 0;
+                    break;
+            }
+            if (is_control) {
+                message_flag_check(global.messages[i], "enemychatterhidden");
+            }
         }
     }
 }
@@ -253,7 +270,13 @@ if ("available_usernames" in global.controller) {
                             nttlive_messagetime = 30 * 2;
                             nttlive_message = msg.content;
                             nttlive_colour = make_color_rgb(msg.color.red, msg.color.green, msg.color.blue);
-                            trace_color("[" + string_upper(mod_script_call("mod", "nttlive_util", "enemy_get_alias_inst", self)) + "] " + msg.author + ": " + msg.content, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                            if (global.config.displayMessagesInNTTChat == json_true) {
+                                var tracemsg = msg.author + ": " + msg.content;
+                                if (global.config.displayMessagesAboveEnemies == json_true) {
+                                    tracemsg = "[" + string_upper(mod_script_call("mod", "nttlive_util", "enemy_get_alias_inst", self)) + "] " + tracemsg;
+                                }
+                                trace_color(tracemsg, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                            }
                         }
                         exit;
                     }
@@ -308,75 +331,77 @@ with (Menu) {
 }
 
 // mutation/ultra/crown voting
-if (instance_exists(LevCont)) {
-    for (var i = 0; i < array_length(global.skill_voting_types); i++) {
-        if (array_length(instances_matching(global.skill_voting_types[i].button_object, "nttlive_votedskill", undefined)) > 0) {
-            global.skill_voting_type = global.skill_voting_types[i];
-            var message = "TwitchVotes Vote for the " + global.skill_voting_type.displayname + "! ";
-            var skillnum = 1;
-            global.skill_voting = [];
-            with (global.skill_voting_type.button_object) {
-                array_push(global.skill_voting, {skillicon: mod_script_call("mod", "nttlive_util", "instance_variables_grab", self), skill_name: name, skill_sprite: {spr: sprite_index, subimg: image_index}, votes: 0, visual_height: 0});
-                message += string(skillnum) + " for " + string_upper(name);
-                instance_destroy();
-                if (instance_exists(global.skill_voting_type.button_object)) {
-                    message += ", ";
-                }
-                skillnum++;
-            }
-            send_message(message);
-            global.skill_voting_time = global.skill_voting_maxtime;
-        }
-    }
-
-    if (array_length(global.skill_voting) > 0) {
-        for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "skillvoting")) {
-            var skillnum = real(global.messages[i].content) - 1;
-            if (skillnum >= 0 && skillnum < array_length(global.skill_voting)) {
-                message_flag_check(global.messages[i], "enemychatterhidden");
-                global.skill_voting[skillnum].votes++;
-            }
-        }
-
-        with (LevCont) splatanim = 0;
-
-        var total_votes = 0;
-        for (var i = 0; i < array_length(global.skill_voting); i++) total_votes += global.skill_voting[i].votes;
-        for (var i = 0; i < array_length(global.skill_voting); i++) {
-            global.skill_voting[i].visual_height += (global.skill_voting[i].votes / max(total_votes, 1) - global.skill_voting[i].visual_height) * 0.2 * current_time_scale;
-        }
-
-        global.skill_voting_time -= current_time_scale;
-        if (global.skill_voting_time <= 0) {
-            var winners = [];
-            var winner_votes = 0;
-            for (var i = 0; i < array_length(global.skill_voting); i++) {
-                if (global.skill_voting[i].votes >= winner_votes) {
-                    if (global.skill_voting[i].votes > winner_votes) {
-                        winner_votes = global.skill_voting[i].votes;
-                        winners = [];
+if (global.config.mutationAndCrownVoting == json_true) {
+    if (instance_exists(LevCont)) {
+        for (var i = 0; i < array_length(global.skill_voting_types); i++) {
+            if (array_length(instances_matching(global.skill_voting_types[i].button_object, "nttlive_votedskill", undefined)) > 0) {
+                global.skill_voting_type = global.skill_voting_types[i];
+                var message = "TwitchVotes Vote for the " + global.skill_voting_type.displayname + "! ";
+                var skillnum = 1;
+                global.skill_voting = [];
+                with (global.skill_voting_type.button_object) {
+                    array_push(global.skill_voting, {skillicon: mod_script_call("mod", "nttlive_util", "instance_variables_grab", self), skill_name: name, skill_sprite: {spr: sprite_index, subimg: image_index}, votes: 0, visual_height: 0});
+                    message += string(skillnum) + " for " + string_upper(name);
+                    instance_destroy();
+                    if (instance_exists(global.skill_voting_type.button_object)) {
+                        message += ", ";
                     }
-                    array_push(winners, global.skill_voting[i]);
+                    skillnum++;
+                }
+                send_message(message);
+                global.skill_voting_time = global.skill_voting_maxtime;
+            }
+        }
+
+        if (array_length(global.skill_voting) > 0) {
+            for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "skillvoting")) {
+                var skillnum = real(global.messages[i].content) - 1;
+                if (skillnum >= 0 && skillnum < array_length(global.skill_voting)) {
+                    message_flag_check(global.messages[i], "enemychatterhidden");
+                    global.skill_voting[skillnum].votes++;
                 }
             }
-            sound_play(sndMenuCredits);
-            var winnerskill = mod_script_call("mod", "nttlive_util", "array_random", winners);
-            var message = "TwitchVotes The voting is over! BROADCASTER_NAME gets " + winnerskill.skill_name;
-            send_message(message);
 
-            with (instance_create(0, 0, global.skill_voting_type.button_object)) {
-                mod_script_call("mod", "nttlive_util", "instance_variables_replace", self, winnerskill.skillicon);
-                nttlive_votedskill = 1;
-                num = 0;
+            with (LevCont) splatanim = 0;
+
+            var total_votes = 0;
+            for (var i = 0; i < array_length(global.skill_voting); i++) total_votes += global.skill_voting[i].votes;
+            for (var i = 0; i < array_length(global.skill_voting); i++) {
+                global.skill_voting[i].visual_height += (global.skill_voting[i].votes / max(total_votes, 1) - global.skill_voting[i].visual_height) * 0.2 * current_time_scale;
             }
 
-            with (LevCont) splatanim = 1;
+            global.skill_voting_time -= current_time_scale;
+            if (global.skill_voting_time <= 0) {
+                var winners = [];
+                var winner_votes = 0;
+                for (var i = 0; i < array_length(global.skill_voting); i++) {
+                    if (global.skill_voting[i].votes >= winner_votes) {
+                        if (global.skill_voting[i].votes > winner_votes) {
+                            winner_votes = global.skill_voting[i].votes;
+                            winners = [];
+                        }
+                        array_push(winners, global.skill_voting[i]);
+                    }
+                }
+                sound_play(sndMenuCredits);
+                var winnerskill = mod_script_call("mod", "nttlive_util", "array_random", winners);
+                var message = "TwitchVotes The voting is over! BROADCASTER_NAME gets " + winnerskill.skill_name;
+                send_message(message);
 
-            global.skill_voting = [];
+                with (instance_create(0, 0, global.skill_voting_type.button_object)) {
+                    mod_script_call("mod", "nttlive_util", "instance_variables_replace", self, winnerskill.skillicon);
+                    nttlive_votedskill = 1;
+                    num = 0;
+                }
+
+                with (LevCont) splatanim = 1;
+
+                global.skill_voting = [];
+            }
         }
+        LevCont.select = 0;
+        LevCont.maxselect = 0;
     }
-    LevCont.select = 0;
-    LevCont.maxselect = 0;
 }
 
 // revive voting
@@ -403,6 +428,7 @@ if (global.secondlife) {
             with (Player) if ("secondlife_dead" in self && secondlife_dead) {
                 my_health = round(maxhealth / 2);
                 candie = 1;
+                nexthurt = current_frame + 30;
                 canfire = secondlife_canfire;
                 canspec = secondlife_canspec;
                 canswap = secondlife_canswap;
@@ -477,7 +503,7 @@ with (Player) {
         if (fork()) {
             wait 3;
             if (instance_exists(self) && message_flag_check(msg, "enemychatterhidden")) {
-                ammo[nttlive_streamammo_index] += 3;
+                ammo[nttlive_streamammo_index] += global.config.specialAmmoPerMessage;
                 if (ammo[nttlive_streamammo_index] > typ_amax[nttlive_streamammo_index]) ammo[nttlive_streamammo_index] = typ_amax[nttlive_streamammo_index];
                 nttlive_streamammo_last = ammo[nttlive_streamammo_index];
             }
@@ -488,8 +514,14 @@ with (Player) {
 
 #define end_step
 if (global.secondlife_count > 0) {
+    var dead_players = 0; // check if all existing players are dead (for co-op support)
     with (Player) {
         if (mod_script_call("mod", "nttlive_util", "player_died", self)) {
+            dead_players++;
+        }
+    }
+    if (dead_players >= instance_number(Player)) {
+        with (Player) {
             global.secondlife = 1;
             global.secondlife_count--;
             global.secondlife_votes = 0;
@@ -578,18 +610,20 @@ if (array_length(global.skill_voting) > 0) {
 
     draw_timebar(global.skill_voting_time / global.skill_voting_maxtime);
 }
-with (Nothing) {
-    draw_set_halign(fa_middle);
-    draw_set_valign(fa_top);
-    draw_set_font(fntChat);
-    draw_text_nt(game_width / 2, 2, `@(color:${c_twitch})` + string(floor(my_health / maxhealth * 100)) + "% done!");
-    draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "THE THRONE IS CONTROLLED BY THE CHAT!");
-    draw_text_nt(game_width / 2, 12 + string_height("W"), "@r" + mod_script_call("mod", "nttlive_util", "text_blink", "@w") + "WALK | BACK | FIRE | LASER");
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
-    draw_set_font(fntM);
+if (global.config.chatControlsTheThrone == json_true) {
+    with (Nothing) {
+        draw_set_halign(fa_middle);
+        draw_set_valign(fa_top);
+        draw_set_font(fntChat);
+        draw_text_nt(game_width / 2, 2, `@(color:${c_twitch})` + string(floor(my_health / maxhealth * 100)) + "% done!");
+        draw_text_nt(game_width / 2, 12, mod_script_call("mod", "nttlive_util", "text_blink", "@r") + "THE THRONE IS CONTROLLED BY THE CHAT!");
+        draw_text_nt(game_width / 2, 12 + string_height("W"), "@r" + mod_script_call("mod", "nttlive_util", "text_blink", "@w") + "WALK | BACK | FIRE | LASER");
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_font(fntM);
 
-    draw_timebar(my_health / maxhealth);
+        draw_timebar(my_health / maxhealth);
+    }
 }
 if (instance_exists(Menu)) {
     draw_set_halign(fa_middle);
@@ -620,7 +654,9 @@ if (global.secondlife) {
     draw_set_halign(fa_middle);
     draw_text_nt(game_width / 2, game_height / 2 - 50, mod_script_call("mod", "nttlive_util", "text_blink", "@y") + "VOTE TO REVIVE!");
     draw_set_font(fntChat);
-    //draw_text_nt(game_width / 2, game_height / 2 - 50 + 8, "@s(" + string(global.secondlife_count + 1) + " revive" + (global.secondlife_count > 1 ? "s" : "") + " left)");
+    if (global.config.revivesPerRun > 1) {
+        draw_text_nt(game_width / 2, game_height / 2 - 50 + 8, "@s(" + string(global.secondlife_count + 1) + " revive" + (global.secondlife_count > 1 ? "s" : "") + " left)");
+    }
     draw_set_font(fntM);
 
     var containersprt = mod_script_call("mod", "nttlive_sprites", "get", "sprSecondLifeContainer");
@@ -706,21 +742,23 @@ with (instance_create(0, 0, CustomObject)) {
 }
 
 #define enemy_chatter_display_draw
-with (instances_matching_ne(hitme, "nttlive_nickname", undefined)) {
-    if (nttlive_colour != -1) {
-        draw_set_font(fntSmall);
-        draw_set_halign(fa_middle);
-        draw_set_valign(fa_bottom);
-        draw_text_nt(x, bbox_top, `@(color:${nttlive_colour})` + nttlive_nickname);
-        if (nttlive_messagetime > 0 && nttlive_message != "") {
-            var add_dots = 0;
-            var maxlength = 32;
-            if (string_length(nttlive_message) > maxlength) add_dots = 1;
-            draw_text_nt(x, bbox_top - string_height("A"), `"` + string_copy(nttlive_message, 1, maxlength) + (add_dots ? "..." : "") + `"`);
+if (global.config.displayMessagesAboveEnemies == json_true) {
+    with (instances_matching_ne(hitme, "nttlive_nickname", undefined)) {
+        if (nttlive_colour != -1) {
+            draw_set_font(fntSmall);
+            draw_set_halign(fa_middle);
+            draw_set_valign(fa_bottom);
+            draw_text_nt(x, bbox_top, `@(color:${nttlive_colour})` + nttlive_nickname);
+            if (nttlive_messagetime > 0 && nttlive_message != "") {
+                var add_dots = 0;
+                var maxlength = 32;
+                if (string_length(nttlive_message) > maxlength) add_dots = 1;
+                draw_text_nt(x, bbox_top - string_height("A"), `"` + string_copy(nttlive_message, 1, maxlength) + (add_dots ? "..." : "") + `"`);
+            }
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+            draw_set_font(fntM);
         }
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-        draw_set_font(fntM);
     }
 }
 
@@ -733,23 +771,25 @@ with (instance_create(0, 0, CustomObject)) {
 }
 
 #define throne_chatter_display_draw
-with (Nothing) {
-    if ("nttlive_throne_lasershake_x" in self and "nttlive_throne_lasershake_y" in self) {
-        draw_set_font(fntM);
-        draw_set_halign(fa_middle);
-        draw_set_valign(fa_top);
-        draw_text_nt(x, bbox_bottom + 4, mod_script_call("mod", "nttlive_util", "text_blink", "v") + " WALK " + mod_script_call("mod", "nttlive_util", "text_blink", "v"));
-        draw_set_valign(fa_bottom);
-        draw_text_nt(x, bbox_top - 4, mod_script_call("mod", "nttlive_util", "text_blink", "^") + " BACK " + mod_script_call("mod", "nttlive_util", "text_blink", "^"));
-        draw_set_valign(fa_center);
-        draw_text_nt(x + nttlive_throne_lasershake_x, bbox_bottom - 45 + nttlive_throne_lasershake_y, "LASER");
-        draw_set_valign(fa_top);
-        draw_set_halign(fa_left);
-        draw_text_nt(bbox_left + 45, bbox_bottom - 30, "FIRE");
-        draw_set_halign(fa_right);
-        draw_text_nt(bbox_right - 45, bbox_bottom - 30, "FIRE");
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-        draw_set_font(fntM);
+if (global.config.chatControlsTheThrone == json_true) {
+    with (Nothing) {
+        if ("nttlive_throne_lasershake_x" in self and "nttlive_throne_lasershake_y" in self) {
+            draw_set_font(fntM);
+            draw_set_halign(fa_middle);
+            draw_set_valign(fa_top);
+            draw_text_nt(x, bbox_bottom + 4, mod_script_call("mod", "nttlive_util", "text_blink", "v") + " WALK " + mod_script_call("mod", "nttlive_util", "text_blink", "v"));
+            draw_set_valign(fa_bottom);
+            draw_text_nt(x, bbox_top - 4, mod_script_call("mod", "nttlive_util", "text_blink", "^") + " BACK " + mod_script_call("mod", "nttlive_util", "text_blink", "^"));
+            draw_set_valign(fa_center);
+            draw_text_nt(x + nttlive_throne_lasershake_x, bbox_bottom - 45 + nttlive_throne_lasershake_y, "LASER");
+            draw_set_valign(fa_top);
+            draw_set_halign(fa_left);
+            draw_text_nt(bbox_left + 45, bbox_bottom - 30, "FIRE");
+            draw_set_halign(fa_right);
+            draw_text_nt(bbox_right - 45, bbox_bottom - 30, "FIRE");
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+            draw_set_font(fntM);
+        }
     }
 }

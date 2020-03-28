@@ -25,6 +25,9 @@ for (var i = 0; i < array_length(events); i++) {
     }
 }
 
+#define events_enabled()
+return mod_variable_get("mod", "nttlive", "config").timedEvents == json_true;
+
 #define game_start
 global.currentevent = "";
 global.eventcooldown = global.eventmaxcooldown;
@@ -32,61 +35,63 @@ global.eventtime = global.eventmaxtime;
 global.eventtext = "";
 
 #define step
-if (!instance_exists(Menu)) {
-    if (!instance_exists(GenCont) && !instance_exists(LevCont)) {
-        if (global.currentevent == "") {
-            global.eventtext_time -= current_time_scale;
-            if (global.eventtext_time <= 0) {
-                global.eventtext = "";
-            }
-
-            global.eventcooldown -= current_time_scale;
-            if (global.eventcooldown <= 0) {
-                if (array_length(global.events) > 0) {
-                    var myevent = mod_script_call("mod", "nttlive_util", "array_random", global.events);
-                    global.currentevent = myevent;
-                    global.eventcooldown = global.eventmaxcooldown;
-                    global.eventtime = global.eventmaxtime;
-                    global.eventname = mod_script_call("mod", "event_" + global.currentevent, "event_name");
+if (events_enabled()) {
+    if (!instance_exists(Menu)) {
+        if (!instance_exists(GenCont) && !instance_exists(LevCont)) {
+            if (global.currentevent == "") {
+                global.eventtext_time -= current_time_scale;
+                if (global.eventtext_time <= 0) {
                     global.eventtext = "";
-                    mod_script_call("mod", "event_" + global.currentevent, "event_start");
-                    sound_play(sndTVOn);
+                }
+
+                global.eventcooldown -= current_time_scale;
+                if (global.eventcooldown <= 0) {
+                    if (array_length(global.events) > 0) {
+                        var myevent = mod_script_call("mod", "nttlive_util", "array_random", global.events);
+                        global.currentevent = myevent;
+                        global.eventcooldown = global.eventmaxcooldown;
+                        global.eventtime = global.eventmaxtime;
+                        global.eventname = mod_script_call("mod", "event_" + global.currentevent, "event_name");
+                        global.eventtext = "";
+                        mod_script_call("mod", "event_" + global.currentevent, "event_start");
+                        sound_play(sndTVOn);
+                    }
+                }
+            } else {
+                mod_script_call("mod", "event_" + global.currentevent, "event_step");
+                global.eventtime -= current_time_scale;
+                if (global.eventtime <= 0) {
+                    global.eventtext = "";
+                    global.eventtext_time = global.eventtext_maxtime;
+                    mod_script_call("mod", "event_" + global.currentevent, "event_end");
+                    global.currentevent = "";
+                    sound_play_pitch(sndTurnChair, 0.7);
                 }
             }
-        } else {
-            mod_script_call("mod", "event_" + global.currentevent, "event_step");
-            global.eventtime -= current_time_scale;
-            if (global.eventtime <= 0) {
-                global.eventtext = "";
-                global.eventtext_time = global.eventtext_maxtime;
-                mod_script_call("mod", "event_" + global.currentevent, "event_end");
-                global.currentevent = "";
-                sound_play_pitch(sndTurnChair, 0.7);
-            }
         }
+
+        if (!instance_exists(Player)) {
+            global.eventtime = 0;
+            global.eventcooldown = global.eventmaxcooldown;
+            global.eventtext = "";
+        }
+    } else {
+        global.currentevent = "";
+        global.eventcooldown = global.eventmaxcooldown;
+        global.eventtime = global.eventmaxtime;
+        global.eventtext = "";
     }
 
-    if (!instance_exists(Player)) {
+    // end all events if the Throne exists or a revival event is in progress
+    if (instance_exists(Nothing) || mod_variable_get("mod", "nttlive", "secondlife")) {
         global.eventtime = 0;
         global.eventcooldown = global.eventmaxcooldown;
         global.eventtext = "";
     }
-} else {
-    global.currentevent = "";
-    global.eventcooldown = global.eventmaxcooldown;
-    global.eventtime = global.eventmaxtime;
-    global.eventtext = "";
-}
-
-// end all events if the Throne exists or a revival event is in progress
-if (instance_exists(Nothing) || mod_variable_get("mod", "nttlive", "secondlife")) {
-    global.eventtime = 0;
-    global.eventcooldown = global.eventmaxcooldown;
-    global.eventtext = "";
 }
 
 #define draw_gui
-if (!instance_exists(LevCont) && !mod_variable_get("mod", "nttlive", "secondlife")) {
+if (!instance_exists(LevCont) && !mod_variable_get("mod", "nttlive", "secondlife") && events_enabled()) {
     if (global.currentevent != "") {
         draw_set_halign(1);
         draw_set_valign(0);

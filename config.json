@@ -1,0 +1,9 @@
+{
+    "displayMessagesInNTTChat": true,
+    "displayMessagesAboveEnemies": true,
+    "mutationAndCrownVoting": true,
+    "chatControlsTheThrone": true,
+    "timedEvents": true,
+    "revivesPerRun": 1,
+    "specialAmmoPerMessage": 5
+}
