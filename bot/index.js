@@ -34,11 +34,12 @@ const client = new tmi.client(options);
 client.on('message', function(channel, state, message, self) {
     if (self) return;
     message = message.trim();
+    let color = state['color'];
+    if (color == null) color = "#808080";
     let message_file = {
-        color: hexRgb(state['color']),
+        color: hexRgb(color),
         content: message,
-        author: state['display-name'],
-        badges: state['badges']
+        author: state['display-name']
     };
     fs.writeFileSync(dir + '/messages/message_' + state['id'].toString() + '.txt', JSON.stringify(message_file), err => console.error(err.message));
 
