@@ -10,4 +10,5 @@
 /loadwep weapons/scythepistol
 /loadwep weapons/incendiary
 /loadwep weapons/chakram
+/loadwep weapons/megaphone
 /loadtxt main2

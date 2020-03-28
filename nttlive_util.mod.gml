@@ -152,3 +152,32 @@ with (_plr) {
     return my_health <= 0 && candie && (!skill_get(mut_strong_spirit) || (skill_get(mut_strong_spirit) && !canspirit)) && (race_id != char_chicken || (race_id == char_chicken && bleed >= 120));
 }
 return 0;
+
+#define collision_circle_all(x1, y1, radius, obj, prec, notme)
+var objs = ds_list_create();
+with (obj) {
+    if (notme && self == other) continue;
+    if (collision_circle(x1, y1, radius, self, prec, 0) != noone) {
+        ds_list_add(objs, self);
+    }
+}
+return ds_list_to_array(objs);
+
+#define collision_cone(_x1, _y1, _len, _angle1, _angle2, _obj)
+var _x2 = _x1 + lengthdir_x(_len * 10, _angle1);
+var _y2 = _y1 + lengthdir_y(_len * 10, _angle1);
+var _x3 = _x1 + lengthdir_x(_len * 10, _angle2);
+var _y3 = _y1 + lengthdir_y(_len * 10, _angle2);
+
+var coll_circle = collision_circle_all(_x1, _y1, _len, _obj, 1, 0);
+var coll_cone = [];
+
+var angmid = (_angle1 + _angle2) / 2;
+with (coll_circle) {
+    var ang = point_direction(_x1, _y1, x, y);
+    if (ang >= _angle1 && ang <= _angle2
+    || collision_line(_x1, _y1, _x2, _y2, self, 1, 0) != noone
+    || collision_line(_x1, _y1, _x3, _y3, self, 1, 0) != noone) array_push(coll_cone, self);
+}
+
+return coll_cone;

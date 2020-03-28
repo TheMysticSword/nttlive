@@ -62,6 +62,10 @@ load("sprIncendiaryBullet", 2, 8, 8);
 load_wep("sprChakram", 6.5, 8);
 load("sprChakramHUD", 1, 0, 8);
 
+load_wep("sprMegaphone", 5, 7);
+load("sprMegaphoneHUD", 1, 0, 5.5);
+load("sprMegaphoneDebuff", 1, 4, 4.5);
+
 #define load(_name, _frames, _xoffset, _yoffset)
 var newsprite = sprite_add("sprites/" + _name + ".png", _frames, _xoffset, _yoffset);
 array_push(global.sprites, {name: _name, spr: newsprite});
