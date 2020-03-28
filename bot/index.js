@@ -59,15 +59,7 @@ client.on('message', function(channel, state, message, self) {
     }
 });
 
-client.on('connected', function(address, port) {
-    console.log('Successfully connected.');
-});
-
-client.on('disconnected', function(reason) {
-    console.log('Disconnected! ' + reason);
-});
-
-setInterval(function () {
+function send_all_messages() {
     let sendMessageFiles = fs.readdirSync(dir + '/sendmessage');
     if (sendMessageFiles.length > 0) {
         sendMessageFiles.forEach(file => {
@@ -79,17 +71,18 @@ setInterval(function () {
             fs.unlinkSync(file_path);
         });
     }
+}
 
+function filter_chatter_list() {
     let active_chatters = [];
     chatters.filter(chatter => chatter['lastTime'] + 1000 * 60 * 5 > Date.now()).forEach(chatter => {
         active_chatters.push(chatter['userName']);
     });
 
     fs.writeFileSync(dir + "/chatters.txt", JSON.stringify(active_chatters));
-}, 1000);
+}
 
-setInterval(function () {
-    // viewer count
+function save_viewer_count() {
     client.api({
         url: 'https://api.twitch.tv/helix/users?login=' + config.channelName,
         headers: {
@@ -114,6 +107,23 @@ setInterval(function () {
             fs.writeFileSync(dir + '/viewer_count.txt', viewers);
         });
     });
+}
+
+client.on('connected', function(address, port) {
+    console.log('Successfully connected.');
+});
+
+client.on('disconnected', function(reason) {
+    console.log('Disconnected! ' + reason);
+});
+
+setInterval(function () {
+    send_all_messages();
+    filter_chatter_list();
+}, 1000);
+
+setInterval(function () {
+    save_viewer_count();
 }, 1000 * 60 * 2);
 
 client.connect();
