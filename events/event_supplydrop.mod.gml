@@ -31,7 +31,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     ds_list_shuffle(weaponlist);
     for (var i = 0; i < maxweps; i++) {
         var mywep = ds_list_find_value(weaponlist, 0);
-        ds_list_delete(weaponlist, 1);
+        ds_list_delete(weaponlist, 0);
         array_push(supplydrop_voting, {wep: mywep, votes: 0, visual_height: 0});
         message += "ote w" + string(i + 1) + " for " + weapon_get_name(mywep);
         if (i < maxweps - 1) {
