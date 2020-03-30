@@ -42,7 +42,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
             var areanum = real(string_delete(mod_variable_get("mod", "nttlive", "messages")[i].content, 1, 1)) - 1;
             if (areanum >= 0 && areanum < array_length(teleport_voting)) {
-                teleport_voting[weareanum].votes++;
+                teleport_voting[areanum].votes++;
             }
         }
     }
