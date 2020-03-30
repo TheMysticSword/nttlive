@@ -93,6 +93,7 @@ global.timedupdate_time -= current_time_scale;
 if (global.timedupdate_time <= 0) {
     global.timedupdate_time = global.timedupdate_maxtime;
 
+    refill_available_enemy_usernames();
     end_step_create();
 
     global.messages = [];
@@ -216,12 +217,6 @@ with (GenCont) {
         // on each portal, give rads based on the number of viewers
         // global.viewer_rads = round(global.viewers * 0.5);
         // GameCont.rad += global.viewer_rads;
-
-        // also refill the chatter list
-        global.controller.available_usernames = ds_list_create();
-        for (var i = 0; i < array_length(global.chatters); i++) {
-            ds_list_add(global.controller.available_usernames, global.chatters[i]);
-        }
     }
 }
 
@@ -292,6 +287,7 @@ if ("available_usernames" in global.controller) {
     }
 } else {
     global.controller.available_usernames = ds_list_create();
+    refill_available_enemy_usernames();
 }
 
 with (Menu) {
@@ -751,6 +747,15 @@ return has_flag;
 var not_flagged = !message_has_flag(message, flag);
 if (not_flagged) ds_list_add(message.flaglist, flag);
 return not_flagged;
+
+#define refill_available_enemy_usernames()
+if (instance_exists(global.controller)) {
+    for (var i = 0; i < array_length(global.chatters); i++) {
+        if (ds_list_find_index(global.controller.available_usernames, global.chatters[i]) == -1) {
+            ds_list_add(global.controller.available_usernames, global.chatters[i]);
+        }
+    }
+}
 
 #define enemy_chatter_display_create()
 with (instance_create(0, 0, CustomObject)) {
