@@ -238,48 +238,53 @@ if (!mod_script_call("mod", "nttlive_util", "custom_object_exists", "EnemyChatte
 }
 if ("available_usernames" in global.controller) {
     var enemies = mod_script_call("mod", "nttlive_util", "array_shuffle", instances_matching(enemy, "", undefined));
-    with (enemies) if (instance_exists(self)) {
-        if ("nttlive_message" not in self) {
-            nttlive_message = "";
-            nttlive_messagetime = 0;
-            nttlive_colour = -1;
-        }
-        nttlive_messagetime -= current_time_scale;
-        if ("nttlive_nickname" not in self) {
-            if (ds_list_size(global.controller.available_usernames) > 0) {
-                var new_username_ind = irandom(ds_list_size(global.controller.available_usernames) - 1);
-                var new_username = ds_list_find_value(global.controller.available_usernames, new_username_ind);
-                nttlive_nickname = new_username;
-                ds_list_delete(global.controller.available_usernames, new_username_ind);
+    with (enemies) {
+        if (instance_exists(self)) {
+            if ("nttlive_message" not in self) {
+                nttlive_message = "";
+                nttlive_messagetime = 0;
+                nttlive_colour = -1;
+            }
+            nttlive_messagetime -= current_time_scale;
+            if ("nttlive_nickname" not in self) {
+                if (ds_list_size(global.controller.available_usernames) > 0) {
+                    var new_username_ind = irandom(ds_list_size(global.controller.available_usernames) - 1);
+                    var new_username = ds_list_find_value(global.controller.available_usernames, new_username_ind);
+                    nttlive_nickname = new_username;
+                    ds_list_delete(global.controller.available_usernames, new_username_ind);
 
-                // the messages don't show up while there are no enemies with that nickname
-                // as a result, all of these messages will immeditately show up when this nickname gets assigned to an enemy
-                // to prevent that, we will mark these messages as already shown
-                for (var i = 0; i < array_length(global.messages); i++) {
-                    if (string_lower(global.messages[i].author) == string_lower(nttlive_nickname)) {
-                        message_flag_check(global.messages[i], "enemychatter");
+                    // the messages don't show up while there are no enemies with that nickname
+                    // as a result, all of these messages will immeditately show up when this nickname gets assigned to an enemy
+                    // to prevent that, we will mark these messages as already shown
+                    for (var i = 0; i < array_length(global.messages); i++) {
+                        if (string_lower(global.messages[i].author) == string_lower(nttlive_nickname)) {
+                            message_flag_check(global.messages[i], "enemychatter");
+                        }
                     }
                 }
-            }
-        } else {
-            for (var i = 0; i < array_length(global.messages); i++) if (message_flag_check(global.messages[i], "enemychatter")) {
-                var msg = global.messages[i];
-                if (string_lower(msg.author) == string_lower(nttlive_nickname)) {
-                    if (fork()) {
-                        wait 2;
-                        if (instance_exists(self) && message_flag_check(msg, "enemychatterhidden")) {
-                            nttlive_messagetime = 30 * 2;
-                            nttlive_message = msg.content;
-                            nttlive_colour = make_color_rgb(msg.color.red, msg.color.green, msg.color.blue);
-                            if (global.config.displayMessagesInNTTChat == json_true) {
-                                var tracemsg = msg.author + ": " + msg.content;
-                                if (global.config.displayMessagesAboveEnemies == json_true) {
-                                    tracemsg = "[" + string_upper(mod_script_call("mod", "nttlive_util", "enemy_get_alias_inst", self)) + "] " + tracemsg;
+            } else {
+                for (var i = 0; i < array_length(global.messages); i++) {
+                    var msg = global.messages[i];
+                    if (!message_has_flag(msg, "enemychatter")) {
+                        if (string_lower(msg.author) == string_lower(nttlive_nickname)) {
+                            message_flag_check(msg, "enemychatter");
+                            if (fork()) {
+                                wait 2;
+                                if (instance_exists(self) && message_flag_check(msg, "enemychatterhidden")) {
+                                    nttlive_messagetime = 30 * 2;
+                                    nttlive_message = msg.content;
+                                    nttlive_colour = make_color_rgb(msg.color.red, msg.color.green, msg.color.blue);
+                                    if (global.config.displayMessagesInNTTChat == json_true) {
+                                        var tracemsg = msg.author + ": " + msg.content;
+                                        if (global.config.displayMessagesAboveEnemies == json_true) {
+                                            tracemsg = "[" + string_upper(mod_script_call("mod", "nttlive_util", "enemy_get_alias_inst", self)) + "] " + tracemsg;
+                                        }
+                                        trace_color(tracemsg, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                                    }
                                 }
-                                trace_color(tracemsg, make_color_rgb(msg.color.red, msg.color.green, msg.color.blue));
+                                exit;
                             }
                         }
-                        exit;
                     }
                 }
             }
