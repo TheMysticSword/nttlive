@@ -59,6 +59,10 @@ client.on('message', function(channel, state, message, self) {
     }
 });
 
+function arrayRandom(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
 function sendAllMessages() {
     let sendMessageFiles = fs.readdirSync(dir + '/sendmessage');
     if (sendMessageFiles.length > 0) {
