@@ -769,7 +769,13 @@ return not_flagged;
 if (instance_exists(global.controller)) {
     for (var i = 0; i < array_length(global.chatters); i++) {
         if (ds_list_find_index(global.controller.available_usernames, global.chatters[i]) == -1) {
-            ds_list_add(global.controller.available_usernames, global.chatters[i]);
+            var claimed_by_enemy = false;
+            with (instances_matching(enemy, "nttlive_nickname", global.chatters[i])) {
+                claimed_by_enemy = true;
+            }
+            if (!claimed_by_enemy) {
+                ds_list_add(global.controller.available_usernames, global.chatters[i]);
+            }
         }
     }
 }
