@@ -405,6 +405,11 @@ if (global.config.mutationAndCrownVoting == json_true) {
     }
 }
 
+// clear messages during level gen
+if (instance_exists(GenCont)) {
+    global.erase_messages = 1;
+}
+
 // revive voting
 if (global.secondlife) {
     global.secondlife_visual += (global.secondlife_votes - global.secondlife_visual) * 0.3 * current_time_scale;
