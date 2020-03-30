@@ -64,7 +64,7 @@ global.secondlife = 0;
 global.secondlife_count = global.config.revivesPerRun;
 global.skill_voting = [];
 global.skill_voting_time = 0;
-end_step_create();
+global.timedupdate_time = 0;
 
 #define step
 // create the controller
@@ -93,6 +93,10 @@ global.timedupdate_time -= current_time_scale;
 if (global.timedupdate_time <= 0) {
     global.timedupdate_time = global.timedupdate_maxtime;
 
+    end_step_create();
+
+    global.messages = [];
+
     global.chatters = [];
     wait file_load("chatters.txt");
     if (file_exists("chatters.txt")) {
@@ -104,10 +108,6 @@ if (global.timedupdate_time <= 0) {
     if (file_exists("viewer_count.txt")) {
         global.viewers = real(string_load("viewer_count.txt"));
     }
-
-    global.messages = [];
-
-    end_step_create();
 }
 
 // fetch messages
