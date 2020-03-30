@@ -5,7 +5,7 @@ global.messages = [];
 global.erase_messages = 0;
 
 global.timedupdate_time = 0;
-global.timedupdate_maxtime = 30 * 60;
+global.timedupdate_maxtime = 30 * 30;
 
 global.chatters = [];
 global.viewers = 0;
