@@ -40,6 +40,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
             autocontrol_resetauto = weapon_get_auto(wep);
             weapon_set_auto(wep, 0);
         }
+        with (mod_variable_get("mod", "nttlive", "controller")) autocontrol_fired += 1;
     }
     if (string_pos("PowerUpR", mod_variable_get("mod", "nttlive", "messages")[i].content) != 0) {
         mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
@@ -48,6 +49,7 @@ for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages"))
             usespec = 1;
             autocontrol_resetspec = 1;
         }
+        with (mod_variable_get("mod", "nttlive", "controller")) autocontrol_specd += 1;
     }
 }
 
