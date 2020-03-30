@@ -12,13 +12,14 @@ mod_variable_set("mod", "nttlive_events", "eventtext", "b:@r:bVOTE TO CHANGE DIF
 #define event_step
 for (var i = 0; i < array_length(mod_variable_get("mod", "nttlive", "messages")); i++) if (mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "difficultyshift")) {
     with (mod_variable_get("mod", "nttlive", "controller")) {
+        var division = max(mod_variable_get("mod", "nttlive", "viewers") * mod_variable_get("mod", "nttlive", "config").viewerScalingFactor, 1);
         if (mod_variable_get("mod", "nttlive", "messages")[i].content == "+") {
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
-            difficultyshift_add += 1 / (max(mod_variable_get("mod", "nttlive", "viewers"), 1) * 0.4);
+            difficultyshift_add += 1 / division;
         }
         if (mod_variable_get("mod", "nttlive", "messages")[i].content == "-") {
             mod_script_call("mod", "nttlive", "message_flag_check", mod_variable_get("mod", "nttlive", "messages")[i], "enemychatterhidden");
-            difficultyshift_add -= 1 / (max(mod_variable_get("mod", "nttlive", "viewers"), 1) * 0.4);
+            difficultyshift_add -= 1 / division;
         }
     }
 }

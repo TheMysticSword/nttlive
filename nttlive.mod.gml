@@ -43,7 +43,8 @@ global.config = {
     chatControlsTheThrone: true,
     timedEvents: true,
     revivesPerRun: 1,
-    specialAmmoPerMessage: 5
+    specialAmmoPerMessage: 5,
+    viewerScalingFactor: 0.2
 };
 var config_file = "config.json";
 wait file_load(config_file);
@@ -165,7 +166,7 @@ if (global.config.chatControlsTheThrone == json_true) {
 
         // laser charging
         if ("nttlive_throne_lasercharge" not in self) nttlive_throne_lasercharge = 0;
-        if ("nttlive_throne_maxlasercharge" not in self) nttlive_throne_maxlasercharge = 10 + global.viewers;
+        if ("nttlive_throne_maxlasercharge" not in self) nttlive_throne_maxlasercharge = 10 + global.viewers * global.config.viewerScalingFactor;
         if ("nttlive_throne_lasershake_x" not in self) nttlive_throne_lasershake_x = 0;
         if ("nttlive_throne_lasershake_y" not in self) nttlive_throne_lasershake_y = 0;
         var maxshake = (nttlive_throne_lasercharge / nttlive_throne_maxlasercharge) * 20;
@@ -187,11 +188,11 @@ if (global.config.chatControlsTheThrone == json_true) {
                     event_perform(ev_alarm, 2);
                     break;
                 case "walk":
-                    walk = 2;
+                    walk = 5;
                     walkdir = 270;
                     break;
                 case "back":
-                    walk = 10;
+                    walk = 15;
                     walkdir = 90;
                     break;
                 case "laser":
@@ -525,7 +526,7 @@ if (global.secondlife_count > 0) {
             global.secondlife = 1;
             global.secondlife_count--;
             global.secondlife_votes = 0;
-            global.secondlife_maxvotes = 5 + global.viewers;
+            global.secondlife_maxvotes = 10 + global.viewers * global.config.viewerScalingFactor;
             global.secondlife_visual = 0;
             global.secondlife_time = global.secondlife_maxtime;
             secondlife_revive_x = x;

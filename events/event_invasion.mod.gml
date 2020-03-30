@@ -11,7 +11,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     var maxwords = 5;
     for (var i = 0; i < maxwords; i++) {
         var wordindex = irandom(ds_list_size(words) - 1);
-        array_push(invasion_portals, {portal: noone, word: ds_list_find_value(words, wordindex), charge: 0, maxcharge: 5 + 0.4 * mod_variable_get("mod", "nttlive", "viewers"), shake_x: 0, shake_y: 0, typedtimes: 0});
+        array_push(invasion_portals, {portal: noone, word: ds_list_find_value(words, wordindex), charge: 0, maxcharge: 5 + mod_variable_get("mod", "nttlive", "viewers") * mod_variable_get("mod", "nttlive", "config").viewerScalingFactor, shake_x: 0, shake_y: 0, typedtimes: 0});
         message += ds_list_find_value(words, wordindex);
         ds_list_delete(words, wordindex);
         if (i + 1 < maxwords) {

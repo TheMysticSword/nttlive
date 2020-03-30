@@ -5,5 +5,6 @@
     "chatControlsTheThrone": true,
     "timedEvents": true,
     "revivesPerRun": 1,
-    "specialAmmoPerMessage": 5
+    "specialAmmoPerMessage": 5,
+    "viewerScalingFactor": 0.2
 }
