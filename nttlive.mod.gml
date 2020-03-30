@@ -67,6 +67,15 @@ global.skill_voting_time = 0;
 end_step_create();
 
 #define step
+// create the controller
+if (!instance_exists(global.controller)) {
+    with (instance_create(0, 0, CustomObject)) {
+        name = "NTTLiveCont";
+        persistent = 1;
+        global.controller = self;
+    }
+}
+
 // mark explo floors to differentiate from regular floors
 with (FloorExplo) {
     nttlive_floorexplo = 1;
@@ -114,15 +123,6 @@ for (var i = 0; i < array_length(files); i++) {
             array_push(global.messages, message_data);
             file_delete(files[i].path);
         }
-    }
-}
-
-// create the controller
-if (!instance_exists(global.controller)) {
-    with (instance_create(0, 0, CustomObject)) {
-        name = "NTTLiveCont";
-        persistent = 1;
-        global.controller = self;
     }
 }
 
