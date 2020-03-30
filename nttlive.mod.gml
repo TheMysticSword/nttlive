@@ -246,6 +246,23 @@ if ("available_usernames" in global.controller) {
                     var new_username_ind = irandom(ds_list_size(global.controller.available_usernames) - 1);
                     var new_username = ds_list_find_value(global.controller.available_usernames, new_username_ind);
                     nttlive_nickname = new_username;
+                    nttlive_colour = mod_script_call("mod", "nttlive_util", "array_random", [
+                        c_red,
+                        c_green,
+                        c_blue,
+                        make_color_rgb(178, 34, 34),
+                        make_color_rgb(255, 127, 80),
+                        make_color_rgb(154, 205, 50),
+                        make_color_rgb(255, 69, 0),
+                        make_color_rgb(46, 139, 87),
+                        make_color_rgb(218, 165, 32),
+                        make_color_rgb(210, 105, 30),
+                        make_color_rgb(95, 158, 160),
+                        make_color_rgb(30, 144, 255),
+                        make_color_rgb(255, 105, 180),
+                        make_color_rgb(138, 43, 226),
+                        make_color_rgb(0, 255, 127)
+                    ]);
                     ds_list_delete(global.controller.available_usernames, new_username_ind);
 
                     // the messages don't show up while there are no enemies with that nickname
