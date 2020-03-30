@@ -402,6 +402,10 @@ if (global.config.mutationAndCrownVoting == json_true) {
         }
         LevCont.select = 0;
         LevCont.maxselect = 0;
+    } else {
+        for (var i = 0; i < array_length(global.messages); i++) {
+            message_flag_check(global.messages[i], "skillvoting");
+        }
     }
 }
 
