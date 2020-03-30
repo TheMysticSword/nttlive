@@ -15,6 +15,17 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
         {name: "labs", icon: sprTerminal, index: 6},
         {name: "palace", icon: sprSmallGenerator, index: 7}
     );
+    var secretareas = [
+        {name: "night desert", icon: sprNightCactus, index: 0},
+        {name: "oasis", icon: sprAnchor, index: 101},
+        {name: "pizza sewers", icon: sprPizzaBox, index: 102},
+        {name: "mansion", icon: sprMoneyPile, index: 103},
+        {name: "cursed caves", icon: sprCrystalPropBlue, index: 104},
+        {name: "jungle", icon: sprBushIdle, index: 105}
+    ];
+    if (random(5) < 1) {
+        ds_list_add(arealist, mod_script_call("mod", "nttlive_util", "array_random"), secretareas);
+    }
     var delete_pos = -1;
     for (var i = 0; i < ds_list_size(arealist); i++) {
         if (ds_list_find_value(arealist, i).index == GameCont.area) delete_pos = i;
