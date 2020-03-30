@@ -2,12 +2,32 @@
 return "supply drop";
 
 #define event_start
+var tempweaponlist = ds_list_create();
+var minhard = GameCont.hard + 3;
+var maxhard = 0;
+weapon_get_list(tempweaponlist);
+for (var i = 0; i < ds_list_size(tempweaponlist); i++) {
+    var mywep = ds_list_find_value(tempweaponlist, i);
+    if (weapon_get_area(mywep) > maxhard) {
+        maxhard = weapon_get_area(mywep);
+    }
+}
+if (minhard > maxhard - 3) {
+    minhard = maxhard - 3;
+}
+
 var message = "TwitchVotes It's time for the supply drop! Which weapon should BROADCASTER_NAME get? V";
 with (mod_variable_get("mod", "nttlive", "controller")) {
     supplydrop_voting = [];
     var weaponlist = ds_list_create();
     var maxweps = 3;
-    weapon_get_list(weaponlist, 0);
+    weapon_get_list(weaponlist, minhard);
+    if (ds_list_size(weaponlist) < maxweps) {
+        var metaweps = [wep_ultra_revolver, wep_ultra_shotgun, wep_ultra_crossbow, wep_ultra_grenade_launcher, wep_ultra_laser_pistol, wep_ultra_shovel, wep_super_plasma_cannon];
+        for (var i = 0; i < array_length(metaweps); i++) {
+            ds_list_add(weaponlist, metaweps[i]);
+        }
+    }
     ds_list_shuffle(weaponlist);
     for (var i = 0; i < maxweps; i++) {
         var mywep = ds_list_find_value(weaponlist, 1);
