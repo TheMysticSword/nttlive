@@ -63,6 +63,37 @@ function arrayRandom(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
+function addRandomChatters(amount) {
+    for (let i = 0; i < amount; i++) {
+        let randomUserName = '';
+        let randomUserNameParts = ['Super', 'Cool', 'Epic', 'Master', 'Gamer', 'Robot', 'Not', 'Average', 'Person', 'Shadow', 'Sun', 'Ice', 'Wind', 'Surfer', 'Rider', 'Y', 'J', '_', 'e', 'Sports', '7', '0', 'xX', 'Xx', 'Hyper', 'Strider', 'Bonk', 'Moon', 'Angel', 'Demon', 'God', 'Devil', 'Key'];
+        for (let j = 0; j < 3; j++) {
+            randomUserName += arrayRandom(randomUserNameParts);
+        }
+        chatters.push({
+            userName: randomUserName,
+            lastTime: Date.now()
+        });
+    }
+}
+
+function randomChatterMessage() {
+    if (chatters.length > 0) {
+        let myChatter = arrayRandom(chatters);
+        let messageContent = '';
+        let letters = 'abcdefghijklmnopqrstuvwxyz';
+        for (let i = 0; i < 16; i++) {
+            messageContent += letters.charAt(Math.floor(Math.random() * letters.length));
+        }
+        let messageFile = {
+            color: hexRgb('#808080'),
+            content: messageContent,
+            author: myChatter['userName']
+        };
+        fs.writeFileSync(dir + '/messages/message_' + messageContent.toString() + '.txt', JSON.stringify(messageFile), err => console.error(err.message));
+    }
+}
+
 function sendAllMessages() {
     let sendMessageFiles = fs.readdirSync(dir + '/sendmessage');
     if (sendMessageFiles.length > 0) {
