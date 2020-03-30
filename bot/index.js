@@ -22,8 +22,8 @@ if (!fs.existsSync(dir + '/sendmessage')) {
     let sendMessageFiles = fs.readdirSync(dir + '/sendmessage');
     if (sendMessageFiles.length > 0) {
         sendMessageFiles.forEach(file => {
-            let file_path = dir + '/sendmessage/' + file;
-            fs.unlinkSync(file_path);
+            let filePath = dir + '/sendmessage/' + file;
+            fs.unlinkSync(filePath);
         });
     }
 }
@@ -36,53 +36,53 @@ client.on('message', function(channel, state, message, self) {
     message = message.trim();
     let color = state['color'];
     if (color == null) color = "#808080";
-    let message_file = {
+    let messageFile = {
         color: hexRgb(color),
         content: message,
         author: state['display-name']
     };
-    fs.writeFileSync(dir + '/messages/message_' + state['id'].toString() + '.txt', JSON.stringify(message_file), err => console.error(err.message));
+    fs.writeFileSync(dir + '/messages/message_' + state['id'].toString() + '.txt', JSON.stringify(messageFile), err => console.error(err.message));
 
-    let my_chatter = null;
+    let myChatter = null;
     chatters.forEach(chatter => {
         if (chatter['userName'] == state['display-name']) {
-            my_chatter = chatter;
+            myChatter = chatter;
         }
     });
-    if (my_chatter == null) {
+    if (myChatter == null) {
         chatters.push({
             userName: state['display-name'],
             lastTime: Date.now()
         });
     } else {
-        my_chatter['lastTime'] = Date.now()
+        myChatter['lastTime'] = Date.now();
     }
 });
 
-function send_all_messages() {
+function sendAllMessages() {
     let sendMessageFiles = fs.readdirSync(dir + '/sendmessage');
     if (sendMessageFiles.length > 0) {
         sendMessageFiles.forEach(file => {
-            let file_path = dir + '/sendmessage/' + file;
-            let file_contents = stringFormat(fs.readFileSync(file_path).toString());
+            let filePath = dir + '/sendmessage/' + file;
+            let fileContents = stringFormat(fs.readFileSync(filePath).toString());
             client.channels.forEach(channel => {
-                client.say(channel, file_contents);
+                client.say(channel, fileContents);
             });
-            fs.unlinkSync(file_path);
+            fs.unlinkSync(filePath);
         });
     }
 }
 
-function filter_chatter_list() {
-    let active_chatters = [];
+function filterChatterList() {
+    let activeChatters = [];
     chatters.filter(chatter => chatter['lastTime'] + 1000 * 60 * 5 > Date.now()).forEach(chatter => {
-        active_chatters.push(chatter['userName']);
+        activeChatters.push(chatter['userName']);
     });
 
-    fs.writeFileSync(dir + "/chatters.txt", JSON.stringify(active_chatters));
+    fs.writeFileSync(dir + "/chatters.txt", JSON.stringify(activeChatters));
 }
 
-function save_viewer_count() {
+function saveViewerCount() {
     client.api({
         url: 'https://api.twitch.tv/helix/users?login=' + config.channelName,
         headers: {
@@ -90,9 +90,9 @@ function save_viewer_count() {
         }
     }, function (err, res, body) {
         // first we need to get the user id
-        let user_id = body['data'][0]['id'];
+        let userID = body['data'][0]['id'];
         client.api({
-            url: 'https://api.twitch.tv/kraken/streams/' + user_id,
+            url: 'https://api.twitch.tv/kraken/streams/' + userID,
             headers: {
                 'Client-ID': config['clientID'],
                 'Accept': 'application/vnd.twitchtv.v5+json'
@@ -111,7 +111,7 @@ function save_viewer_count() {
 
 client.on('connected', function(address, port) {
     console.log('Successfully connected.');
-    save_viewer_count();
+    saveViewerCount();
 });
 
 client.on('disconnected', function(reason) {
@@ -119,12 +119,12 @@ client.on('disconnected', function(reason) {
 });
 
 setInterval(function () {
-    send_all_messages();
-    filter_chatter_list();
+    sendAllMessages();
+    filterChatterList();
 }, 1000);
 
 setInterval(function () {
-    save_viewer_count();
+    saveViewerCount();
 }, 1000 * 60 * 2);
 
 client.connect();
