@@ -34,7 +34,7 @@ with (mod_variable_get("mod", "nttlive", "controller")) {
     var maxareas = 3;
     ds_list_shuffle(arealist);
     for (var i = 0; i < maxareas; i++) {
-        var myarea = ds_list_find_value(arealist, 1);
+        var myarea = ds_list_find_value(arealist, 0);
         ds_list_delete(arealist, 1);
         array_push(teleport_voting, {area: myarea, votes: 0, visual_height: 0});
         message += "a" + string(i + 1) + " for " + string_upper(myarea.name);
