@@ -36,10 +36,6 @@ var result = 0;
 with (mod_variable_get("mod", "nttlive", "controller")) {
     result = round(difficultyshift_add);
     GameCont.hard += round(difficultyshift_add);
-    var loops = floor(GameCont.hard / 16);
-    if (GameCont.loops < loops) {
-        GameCont.loops = loops;
-    }
 }
 mod_script_call("mod", "nttlive", "send_message", "imGlitch The voting is over! The difficulty was " + (result >= 0 ? "increased" : "decreased") + " by " + string(abs(result)) + " levels!");
 mod_variable_set("mod", "nttlive_events", "eventtext", "DIFFICULTY " + (result >= 0 ? "b:@r:b+" : "b:@g:b") + string(abs(result)) + "!");
