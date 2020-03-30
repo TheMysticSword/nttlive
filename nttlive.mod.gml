@@ -734,13 +734,17 @@ draw_rectangle((game_width / 2) * (1 - time_left), 0, game_width / 2, 2, 0);
 draw_rectangle(game_width / 2, 0, game_width / 2 + (game_width / 2) * time_left, 2, 0);
 draw_set_color(c_white);
 
+#define message_has_flag(message, flag)
+var has_flag = 0;
+if (ds_list_find_index(message.flaglist, flag) != -1) {
+    has_flag = 1;
+}
+return has_flag;
+
 // applies this flag to the message. returns 1 if the flag wasn't added before, otherwise returns 0
 #define message_flag_check(message, flag)
-var not_flagged = 1;
-if (ds_list_find_index(message.flaglist, flag) != -1) {
-    not_flagged = 0;
-}
-ds_list_add(message.flaglist, flag);
+var not_flagged = !message_has_flag(message, flag);
+if (not_flagged) ds_list_add(message.flaglist, flag);
 return not_flagged;
 
 #define enemy_chatter_display_create()
