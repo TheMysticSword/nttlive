@@ -1,3 +1,5 @@
+# This project was abandoned and will not receive any updates
+---
 # NTTLive
 A Twitch Integration mod for Nuclear Throne Together.
 
